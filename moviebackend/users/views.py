@@ -15,7 +15,7 @@ def register(request):
             return redirect('home')
     else:
         form = UserRegisterForm()
-    return render(request, 'users/register.html', {'form': form})
+    return render(request, 'register.html', {'form': form})
 
 def user_login(request):
     if request.method == 'POST':
@@ -27,7 +27,7 @@ def user_login(request):
             return redirect('home')
         else:
             messages.error(request, "Invalid username or password")
-    return render(request, 'users/login.html')
+    return render(request, 'login.html')
 
 
 def user_logout(request):
@@ -44,4 +44,4 @@ def profile(request):
             return redirect('profile')
     else:
         form = UserUpdateForm(instance=request.user)
-    return render(request, 'users/profile.html', {'form': form})
+    return render(request, 'profile.html', {'form': form})
