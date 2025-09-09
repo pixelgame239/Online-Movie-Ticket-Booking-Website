@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from movies.models import Showtime, Seat
-from .models import Booking, Payment
+from movies.models import Showtime
+from .models import Booking, Payment, Seat
 from .forms import PaymentForm
 from django.contrib import messages
 from django.utils import timezone
@@ -33,7 +33,7 @@ def select_seats(request, showtime_id):
             booking.seats.add(seat)
         return redirect('payment', booking_id=booking.id)
     
-    return render(request, 'bookings/select_seats.html', {'showtime': showtime, 'seats': seats})
+    return render(request, 'select_seats.html', {'showtime': showtime, 'seats': seats})
 
 @login_required
 def payment(request, booking_id):
@@ -48,12 +48,12 @@ def payment(request, booking_id):
         )
         messages.success(request, "Payment successful!")
         return redirect('booking_history')
-    return render(request, 'bookings/payment.html', {'booking': booking})
+    return render(request, 'payment.html', {'booking': booking})
 
 @login_required
 def booking_history(request):
     bookings = Booking.objects.filter(customer=request.user).order_by('-booking_date')
-    return render(request, 'bookings/booking_history.html', {'bookings': bookings})
+    return render(request, 'booking_history.html', {'bookings': bookings})
 
 @login_required
 def cancel_booking(request, booking_id):
