@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Select Seats{% endblock %}
+
+{% block content %}
+<h2>Select Seats - {{ showtime.movie.title }} at {{ showtime.cinema.name }}</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="row">
+        {% for seat in seats %}
+            <div class="col-2 mb-2">
+                <label class="form-check-label">
+                    <input type="checkbox" name="seats" value="{{ seat.seat_number }}" class="form-check-input"
+                        {% if seat.is_booked %}disabled{% endif %}>
+                    {{ seat.seat_number }}
+                </label>
+            </div>
+        {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary">Proceed to Payment</button>
+</form>
+{% endblock %}
