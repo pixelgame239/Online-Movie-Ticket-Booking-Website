@@ -78,6 +78,7 @@ DATABASES = {
     }
 }
 
+
 # --- PASSWORD VALIDATION ---
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
@@ -105,5 +106,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # --- LOGIN/LOGOUT ---
 LOGIN_URL = 'user_login'
-LOGIN_REDIRECT_URL = 'movie_list'
-LOGOUT_REDIRECT_URL = 'movie_list'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'

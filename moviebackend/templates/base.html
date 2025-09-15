@@ -8,17 +8,24 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'movie_list' %}">Movie Booking</a>
-        <ul class="navbar-nav ms-auto">
-            {% if user.is_authenticated %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Profile</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'booking_history' %}">Bookings</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'user_logout' %}">Logout</a></li>
-            {% else %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'user_login' %}">Login</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
-            {% endif %}
-        </ul>
+        <a class="navbar-brand" href="{% url 'home' %}">Movie Booking</a>  <!-- ✅ trỏ về home -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'movie_list' %}">Movies</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'booking_history' %}">Bookings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'user_logout' %}">Logout</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'user_login' %}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
 </nav>
 

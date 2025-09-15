@@ -5,6 +5,12 @@ from django.contrib import messages
 from .models import User
 from .forms import UserRegisterForm, UserUpdateForm
 
+
+
+@login_required
+def home(request):
+    return render(request, 'base.html')
+
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -12,7 +18,7 @@ def register(request):
             user = form.save()
             messages.success(request, "Account created successfully!")
             login(request, user)
-            return redirect('home')
+            return redirect('home')  
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
@@ -24,15 +30,15 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return redirect('home')
+            return redirect('home')  
         else:
             messages.error(request, "Invalid username or password")
     return render(request, 'login.html')
 
-
 def user_logout(request):
     logout(request)
     return redirect('home')
+
 
 @login_required
 def profile(request):
