@@ -69,10 +69,16 @@ WSGI_APPLICATION = 'moviebackend.wsgi.application'
 # --- DATABASE ---
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',  
+        'USER': 'postgres.anxkatxbafgpahipxzsw',  # user Supabase
+        'PASSWORD': 'group2database',
+        'HOST': 'aws-1-ap-southeast-1.pooler.supabase.com',
+        'PORT': '6543',
+        
     }
 }
+
 
 # --- PASSWORD VALIDATION ---
 AUTH_PASSWORD_VALIDATORS = [
@@ -90,8 +96,10 @@ USE_TZ = True
 
 # --- STATIC FILES ---
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  
 # --- MEDIA FILES (uploads) ---
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
