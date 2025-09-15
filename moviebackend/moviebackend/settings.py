@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- SECURITY ---
 SECRET_KEY = 'django-insecure-3f31*p3*f=_il7d(t&25-9t4qfy21o5_)31&fvhq**7lr4o1-d'
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = []
 
 # --- INSTALLED APPS ---
@@ -70,12 +70,11 @@ WSGI_APPLICATION = 'moviebackend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',  
-        'USER': 'postgres.anxkatxbafgpahipxzsw',  # user Supabase
-        'PASSWORD': 'group2database',
-        'HOST': 'aws-1-ap-southeast-1.pooler.supabase.com',
+        'NAME': 'postgres',
+        'USER':'postgres.anxkatxbafgpahipxzsw',
+        'PASSWORD':"group2database",
+        'HOST': "aws-1-ap-southeast-1.pooler.supabase.com",
         'PORT': '6543',
-        
     }
 }
 
@@ -96,10 +95,7 @@ USE_TZ = True
 
 # --- STATIC FILES ---
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  
-]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  
+
 # --- MEDIA FILES (uploads) ---
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
