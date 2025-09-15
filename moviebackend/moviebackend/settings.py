@@ -94,6 +94,7 @@ USE_TZ = True
 
 # --- STATIC FILES ---
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # --- MEDIA FILES (uploads) ---
 MEDIA_URL = '/media/'
