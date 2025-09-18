@@ -9,7 +9,7 @@ from .forms import UserRegisterForm, UserUpdateForm
 
 @login_required
 def home(request):
-    return render(request, 'base.html')
+    return render(request, 'movie_list.html')
 
 def register(request):
     if request.method == 'POST':

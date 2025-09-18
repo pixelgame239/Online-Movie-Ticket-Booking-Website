@@ -1,27 +1,98 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
 {% block title %}Đăng nhập{% endblock %}
 
 {% block content %}
-<div class="login-box mx-auto">
-    <div class="d-flex justify-content-center mb-3">
-        <a href="{% url 'user_login' %}" class="btn btn-danger me-2 active">ĐĂNG NHẬP</a>
-        <a href="{% url 'register' %}" class="btn btn-danger">ĐĂNG KÝ</a>
-    </div>
+<style>
+    /* Tabs đăng nhập / đăng ký */
+    .tabs {
+      display: flex;
+      justify-content: space-between;
+      width: 1034px;
+      margin: 40px auto 20px;
+      background: #E80A0A;
+      padding: 20px 100px;
+      color: white;
+      font-size: 30px;
+      font-weight: bold;
+    }
 
+    .tabs div {
+      cursor: pointer;
+    }
+
+    .tabs .active {
+      border-bottom: 4px solid white;
+    }
+
+    /* Form */
+    .login-container {
+      width: 1034px;
+      margin: 20px auto;
+    }
+
+    .login-container label {
+      display: block;
+      margin: 20px 0 10px;
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    .login-container input {
+      width: 100%;
+      height: 70px;
+      font-size: 24px;
+      border: 1px solid #969696;
+      border-radius: 5px;
+      background: #DFDFDF;
+      padding: 0 15px;
+    }
+
+    .login-btn {
+      width: 100%;
+      height: 66px;
+      background: #E80A0A;
+      color: white;
+      font-size: 30px;
+      font-weight: bold;
+      margin-top: 30px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .forgot {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 18px;
+    }
+
+    .forgot a {
+      color: #4896FA;
+      text-decoration: none;
+    }
+</style>
+
+<!-- Tabs -->
+<div class="tabs">
+    <div class="active">ĐĂNG NHẬP</div>
+    <div><a href="{% url 'register' %}" style="color:white;text-decoration:none;">ĐĂNG KÝ</a></div>
+</div>
+
+<!-- Form -->
+<div class="login-container">
     <form method="post">
         {% csrf_token %}
-        <div class="mb-3">
-            <input type="text" name="username" class="form-control" placeholder="Email hoặc số điện thoại" required>
-        </div>
-        <div class="mb-3 position-relative">
-            <input type="password" name="password" class="form-control" placeholder="Mật khẩu" required>
-            <span class="toggle-password">👁️</span>
-        </div>
-        <button type="submit" class="btn btn-danger w-100">ĐĂNG NHẬP</button>
+        <label>Email hoặc số điện thoại</label>
+        <input type="text" name="username" placeholder="Nhập email hoặc số điện thoại" required>
+
+        <label>Mật khẩu</label>
+        <input type="password" name="password" placeholder="Nhập mật khẩu" required>
+
+        <button type="submit" class="login-btn">ĐĂNG NHẬP</button>
     </form>
 
-    <div class="text-center mt-2">
-        <a href="#">Bạn muốn tìm lại mật khẩu?</a>
+    <div class="forgot">
+      <a href="#">Bạn muốn tìm lại mật khẩu?</a>
     </div>
 </div>
 {% endblock %}

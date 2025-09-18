@@ -1,60 +1,183 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>{% block title %}Movie Booking{% endblock %}</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <title>{% block title %}Rạp Việt Nam{% endblock %}</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Inter, sans-serif;
+    }
+
+    /* Header */
+    .site-header {
+      width: 1440px;
+      margin: 0 auto;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 27px;
+      height: 84px;
+      font-size: 28px;
+    }
+
+    .top-bar img {
+      width: 31px;
+      height: 31px;
+    }
+
+    .navbar {
+      height: 149px;
+      background: #FDF7DD;
+      border-top: 12px solid #E52025;
+      border-bottom: 12px solid #E52025;
+      display: flex;
+      align-items: center;
+      padding: 0 200px;
+      gap: 160px;
+    }
+
+    .navbar .logo {
+      width: 111px;
+      height: 84px;
+      background: #C3BBBB;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 34px;
+    }
+
+    .navbar nav a {
+      font-size: 34px;
+      font-weight: bold;
+      text-decoration: none;
+      color: black;
+      margin-right: 40px;
+    }
+
+    /* Main */
+    main {
+      min-height: 400px;
+      padding: 20px 0;
+    }
+
+    /* Footer */
+    footer {
+      width: 1440px;
+      margin: 40px auto 0;
+      padding: 40px 200px;
+      box-sizing: border-box;
+      color: #636363;
+    }
+
+    .footer-columns {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 50px;
+    }
+
+    footer h3 {
+      font-size: 21px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    footer ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    footer ul li {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .company-info {
+      margin-top: 30px;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="top-bar">
+      <a href="{% url 'tickets:my_tickets' %}">
+        <img src="{% static 'images/movie_ticket.png' %}" alt="icon">
+        <span>Vé của tôi</span>
+      </a>
 
-<!-- Top bar -->
-<div class="top-bar text-end px-4 py-1">
-  <a href="#">Vé của tôi</a> | 
-  {% if user.is_authenticated %}
-    <a href="{% url 'user_logout' %}">Đăng xuất</a>
-  {% else %}
-    <a href="{% url 'user_login' %}">Đăng nhập</a> / 
-    <a href="{% url 'register' %}">Đăng ký</a>
-  {% endif %}
-</div>
-
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg custom-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="#"><div class="logo-box">Logo</div></a>
-    <div>
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="#">Phim</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Rạp Phim</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Thành viên</a></li>
-      </ul>
+      <img src="{% static 'images/User.png' %}" alt="icon">
+      {% if user.is_authenticated %}
+        <span>Xin chào, {{ user.username }}</span>
+        <a href="{% url 'logout' %}">Đăng xuất</a>
+      {% else %}
+        <a href="{% url 'login' %}">Đăng nhập</a> /
+        <a href="{% url 'register' %}">Đăng ký</a>
+      {% endif %}
     </div>
-  </div>
-</nav>
 
-<!-- Main content -->
-<div class="container my-5">
-  {% block content %}{% endblock %}
-</div>
-
-<!-- Footer -->
-<footer class="footer mt-5">
-  <div class="container py-4">
-    <div class="row">
-      <div class="col-md-3">Rạp Việt Nam<br>...thông tin...</div>
-      <div class="col-md-3">Điều khoản sử dụng<br>Chính sách bảo mật...</div>
-      <div class="col-md-3">Kết nối với chúng tôi<br>[social icons]</div>
-      <div class="col-md-3">Chăm sóc khách hàng<br>Hotline...</div>
+    <div class="navbar">
+      <div class="logo">Logo</div>
+      <nav>
+        <a href="{% url 'movies:list' %}">Phim</a>
+        <a href="{% url 'cinemas:list' %}">Rạp Phim</a>
+        <a href="{% url 'users:profile' %}">Thành viên</a>
+      </nav>
     </div>
-    <hr>
-    <div class="text-center">
-      <div class="logo-box">Logo</div><br>
-      <small>&copy; 2017 CJ CGV VIETNAM CO., LTD</small>
-    </div>
-  </div>
-</footer>
+  </header>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Nội dung -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-columns">
+      <div>
+        <h3>Rạp Việt Nam</h3>
+      </div>
+      <div>
+        <h3>Điều khoản sử dụng</h3>
+        <ul>
+          <li><a href="{% url 'terms:general' %}">Điều Khoản Chung</a></li>
+          <li><a href="{% url 'terms:transaction' %}">Điều khoản Giao Dịch</a></li>
+          <li><a href="{% url 'terms:payment' %}">Chính Sách Thanh Toán</a></li>
+          <li><a href="{% url 'terms:privacy' %}">Chính Sách Bảo Mật</a></li>
+          <li><a href="{% url 'faq' %}">Câu Hỏi Thường Gặp</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Kết nối với chúng tôi</h3>
+        <ul>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Youtube</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Chăm Sóc Khách Hàng</h3>
+        <ul>
+          <li>Hotline: 1900 6017</li>
+          <li>Email: support@rapvietnam.vn</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="company-info">
+      <strong>Công ty Rạp Việt Nam</strong><br>
+      Giấy Chứng nhận đăng ký doanh nghiệp: 0303675393 đăng ký lần đầu ngày 31/7/2008,<br>
+      được cấp bởi Sở Kế hoạch và Đầu tư Thành phố Hồ Chí Minh<br>
+      Địa chỉ: Lầu 2, số 7/28, Đường Thành Thái, Phường 14, Quận 10, Thành phố Hồ Chí Minh, Việt Nam
+    </div>
+  </footer>
 </body>
 </html>
