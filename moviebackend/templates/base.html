@@ -1,42 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Movie Booking{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>{% block title %}Movie Booking{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'home' %}">Movie Booking</a>  <!-- ✅ trỏ về home -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                {% if user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'movie_list' %}">Movies</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'booking_history' %}">Bookings</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'user_logout' %}">Logout</a></li>
-                {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'user_login' %}">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
-                {% endif %}
-            </ul>
-        </div>
+<!-- Top bar -->
+<div class="top-bar text-end px-4 py-1">
+  <a href="#">Vé của tôi</a> | 
+  {% if user.is_authenticated %}
+    <a href="{% url 'user_logout' %}">Đăng xuất</a>
+  {% else %}
+    <a href="{% url 'user_login' %}">Đăng nhập</a> / 
+    <a href="{% url 'register' %}">Đăng ký</a>
+  {% endif %}
+</div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg custom-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="#"><div class="logo-box">Logo</div></a>
+    <div>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#">Phim</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Rạp Phim</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Thành viên</a></li>
+      </ul>
     </div>
+  </div>
 </nav>
 
-<div class="container">
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
-    {% block content %}{% endblock %}
+<!-- Main content -->
+<div class="container my-5">
+  {% block content %}{% endblock %}
 </div>
+
+<!-- Footer -->
+<footer class="footer mt-5">
+  <div class="container py-4">
+    <div class="row">
+      <div class="col-md-3">Rạp Việt Nam<br>...thông tin...</div>
+      <div class="col-md-3">Điều khoản sử dụng<br>Chính sách bảo mật...</div>
+      <div class="col-md-3">Kết nối với chúng tôi<br>[social icons]</div>
+      <div class="col-md-3">Chăm sóc khách hàng<br>Hotline...</div>
+    </div>
+    <hr>
+    <div class="text-center">
+      <div class="logo-box">Logo</div><br>
+      <small>&copy; 2017 CJ CGV VIETNAM CO., LTD</small>
+    </div>
+  </div>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

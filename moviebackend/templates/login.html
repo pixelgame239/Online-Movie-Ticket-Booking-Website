@@ -1,18 +1,27 @@
-{% extends 'base.html' %}
-{% block title %}Login{% endblock %}
+{% extends "base.html" %}
+{% block title %}Đăng nhập{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
-<form method="post">
-    {% csrf_token %}
-    <div class="mb-3">
-        <label>Username</label>
-        <input type="text" name="username" class="form-control">
+<div class="login-box mx-auto">
+    <div class="d-flex justify-content-center mb-3">
+        <a href="{% url 'user_login' %}" class="btn btn-danger me-2 active">ĐĂNG NHẬP</a>
+        <a href="{% url 'register' %}" class="btn btn-danger">ĐĂNG KÝ</a>
     </div>
-    <div class="mb-3">
-        <label>Password</label>
-        <input type="password" name="password" class="form-control">
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <input type="text" name="username" class="form-control" placeholder="Email hoặc số điện thoại" required>
+        </div>
+        <div class="mb-3 position-relative">
+            <input type="password" name="password" class="form-control" placeholder="Mật khẩu" required>
+            <span class="toggle-password">👁️</span>
+        </div>
+        <button type="submit" class="btn btn-danger w-100">ĐĂNG NHẬP</button>
+    </form>
+
+    <div class="text-center mt-2">
+        <a href="#">Bạn muốn tìm lại mật khẩu?</a>
     </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
+</div>
 {% endblock %}
