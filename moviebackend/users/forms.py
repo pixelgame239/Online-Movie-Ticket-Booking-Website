@@ -20,8 +20,3 @@ class UserUpdateForm(UserChangeForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'phone', 'address']
-def clean_email(self):
-    email = self.cleaned_data.get('email')
-    if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
-        raise forms.ValidationError("Email đã tồn tại, vui lòng chọn email khác.")
-    return email

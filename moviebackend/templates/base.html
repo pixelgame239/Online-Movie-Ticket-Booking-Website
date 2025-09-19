@@ -1,0 +1,184 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Rạp Việt Nam{% endblock %}</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Inter, sans-serif;
+    }
+
+    /* Header */
+    .site-header {
+      width: 1440px;
+      margin: 0 auto;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 27px;
+      height: 84px;
+      font-size: 28px;
+    }
+
+    .top-bar img {
+      width: 31px;
+      height: 31px;
+    }
+
+    .navbar {
+      height: 149px;
+      background: #FDF7DD;
+      border-top: 12px solid #E52025;
+      border-bottom: 12px solid #E52025;
+      display: flex;
+      align-items: center;
+      padding: 0 200px;
+      gap: 160px;
+    }
+
+    .navbar .logo {
+      width: 111px;
+      height: 84px;
+      background: #C3BBBB;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 34px;
+    }
+
+    .navbar nav a {
+      font-size: 34px;
+      font-weight: bold;
+      text-decoration: none;
+      color: black;
+      margin-right: 40px;
+    }
+
+    /* Main */
+    main {
+      min-height: 400px;
+      padding: 20px 0;
+    }
+
+    /* Footer */
+    footer {
+      width: 1440px;
+      margin: 40px auto 0;
+      padding: 40px 200px;
+      box-sizing: border-box;
+      color: #636363;
+    }
+
+    .footer-columns {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 50px;
+    }
+
+    footer h3 {
+      font-size: 21px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    footer ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    footer ul li {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .company-info {
+      margin-top: 30px;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+  </style>
+  <link rel="stylesheet" href="{% static '/style.css' %}">
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="top-bar">
+      <a href="{% url 'bookings:my_tickets' %}">
+        <img src="{% static 'images/movie_ticket.png' %}" alt="icon">
+        <span>Vé của tôi</span>
+      </a>
+
+      <img src="{% static 'images/User.png' %}" alt="icon">
+      {% if user.is_authenticated %}
+        <span>Xin chào, {{ user.username }}</span>
+        <a href="{% url 'users:user_logout' %}">Đăng xuất</a>
+      {% else %}
+        <a href="{% url 'users:user_login' %}">Đăng nhập</a> /
+        <a href="{% url 'users:register' %}">Đăng ký</a>
+      {% endif %}
+    </div>
+
+    <div class="navbar">
+      <div class="logo">Logo</div>
+      <nav>
+        <a href="{% url 'movies:movie_list' %}">Phim</a>
+        <a href="{% url 'movies:movie_list' %}">Rạp Phim</a>
+        <a href="{% url 'users:profile' %}">Thành viên</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Nội dung -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-columns">
+      <div>
+        <h3>Rạp Việt Nam</h3>
+      </div>
+      <div>
+      <h3>Điều khoản sử dụng</h3>
+      <ul>
+        <li><a href="#">Điều Khoản Chung</a></li>
+        <li><a href="#">Điều khoản Giao Dịch</a></li>
+        <li><a href="#">Chính Sách Thanh Toán</a></li>
+        <li><a href="#">Chính Sách Bảo Mật</a></li>
+        <li><a href="#">Câu Hỏi Thường Gặp</a></li>
+      </ul>
+      </div>
+      <div>
+        <h3>Kết nối với chúng tôi</h3>
+        <ul>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Youtube</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Chăm Sóc Khách Hàng</h3>
+        <ul>
+          <li>Hotline: 1900 6017</li>
+          <li>Email: support@rapvietnam.vn</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="company-info">
+      <strong>Công ty Rạp Việt Nam</strong><br>
+      Giấy Chứng nhận đăng ký doanh nghiệp: 0303675393 đăng ký lần đầu ngày 31/7/2008,<br>
+      được cấp bởi Sở Kế hoạch và Đầu tư Thành phố Hồ Chí Minh<br>
+      Địa chỉ: Lầu 2, số 7/28, Đường Thành Thái, Phường 14, Quận 10, Thành phố Hồ Chí Minh, Việt Nam
+    </div>
+  </footer>
+</body>
+</html>

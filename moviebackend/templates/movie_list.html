@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đăng nhập</title>
+  <link rel="stylesheet" href="{% static '/style.css' %}">
+</head>
+<body>
+  <div class="login-container">
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active">Đăng Nhập</button>
+      <button class="tab">Đăng Ký</button>
+    </div>
+
+    <!-- Form -->
+    <form class="login-form">
+      <label>Email hoặc số điện thoại</label>
+      <input type="text" placeholder="Nhập email hoặc số điện thoại">
+
+      <label>Mật khẩu</label>
+      <input type="password" placeholder="Nhập mật khẩu">
+
+      <button type="submit" class="btn-login">Đăng Nhập</button>
+      <a href="#" class="forgot">Bạn muốn tìm lại mật khẩu?</a>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-columns">
+      <div>
+        <h4>Rạp Việt Nam</h4>
+        <p>Giới Thiệu<br>Tiện ích online</p>
+      </div>
+      <div>
+        <h4>Điều khoản sử dụng</h4>
+        <p>
+          Điều Khoản Chung<br>
+          Điều khoản Giao Dịch<br>
+          Chính Sách Thanh Toán<br>
+          Chính Sách Bảo Mật<br>
+          Câu Hỏi Thường Gặp
+        </p>
+      </div>
+      <div>
+        <h4>Kết nối với chúng tôi</h4>
+        <p>
+          <a href="#">Facebook</a> | <a href="#">YouTube</a> | 
+          <a href="#">Zalo</a> | <a href="#">Instagram</a>
+        </p>
+      </div>
+      <div>
+        <h4>Chăm Sóc Khách Hàng</h4>
+        <p>
+          Hotline: 1900 6996<br>
+          Giờ làm việc: 8:00 - 22:00<br>
+          Email: hoidap@ab.vn
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="logo">Logo</div>
+      <p>
+        Công ty Rạp Việt Nam - Giấy Chứng nhận đăng ký doanh nghiệp số: 030275993...<br>
+        COPYRIGHT 2017 © CGV VIETNAM CO., LTD. ALL RIGHTS RESERVED
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
