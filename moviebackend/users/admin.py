@@ -7,11 +7,19 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('is_customer', 'is_admin', 'is_staff')
     search_fields = ('username', 'email')
     ordering = ('username',)
+
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         ('Personal info', {'fields': ('email', 'first_name', 'last_name', 'phone', 'address')}),
         ('Permissions', {'fields': ('is_customer', 'is_admin', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
+    )
+
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'email', 'password1', 'password2', 'is_customer', 'is_admin', 'is_staff', 'is_superuser')}
+        ),
     )
 
 admin.site.register(User, UserAdmin)
