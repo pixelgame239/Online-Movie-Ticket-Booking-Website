@@ -22,13 +22,13 @@ from users import views as user_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/', include('users.urls')),
-    path('movies/', include('movies.urls')),
-    path('bookings/', include('bookings.urls')),
+    path('users/', include('users.urls', namespace="users")),
+    path('movies/', include('movies.urls', namespace="movies")),
+    path('bookings/', include('bookings.urls', namespace="bookings")),
 
     path('', user_views.home, name='home'),
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
