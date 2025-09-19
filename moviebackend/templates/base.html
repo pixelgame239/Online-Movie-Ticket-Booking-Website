@@ -109,7 +109,7 @@
   <!-- Header -->
   <header class="site-header">
     <div class="top-bar">
-      <a href="{% url 'tickets:my_tickets' %}">
+      <a href="{% url 'booking:my_tickets' %}">
         <img src="{% static 'images/movie_ticket.png' %}" alt="icon">
         <span>Vé của tôi</span>
       </a>
@@ -117,10 +117,10 @@
       <img src="{% static 'images/User.png' %}" alt="icon">
       {% if user.is_authenticated %}
         <span>Xin chào, {{ user.username }}</span>
-        <a href="{% url 'logout' %}">Đăng xuất</a>
+        <a href="{% url 'users:logout' %}">Đăng xuất</a>
       {% else %}
-        <a href="{% url 'login' %}">Đăng nhập</a> /
-        <a href="{% url 'register' %}">Đăng ký</a>
+        <a href="{% url 'users:login' %}">Đăng nhập</a> /
+        <a href="{% url 'users:register' %}">Đăng ký</a>
       {% endif %}
     </div>
 
@@ -128,7 +128,7 @@
       <div class="logo">Logo</div>
       <nav>
         <a href="{% url 'movies:list' %}">Phim</a>
-        <a href="{% url 'cinemas:list' %}">Rạp Phim</a>
+        <a href="{% url 'movies:cinemas' %}">Rạp Phim</a>
         <a href="{% url 'users:profile' %}">Thành viên</a>
       </nav>
     </div>
@@ -148,11 +148,11 @@
       <div>
         <h3>Điều khoản sử dụng</h3>
         <ul>
-          <li><a href="{% url 'terms:general' %}">Điều Khoản Chung</a></li>
-          <li><a href="{% url 'terms:transaction' %}">Điều khoản Giao Dịch</a></li>
-          <li><a href="{% url 'terms:payment' %}">Chính Sách Thanh Toán</a></li>
-          <li><a href="{% url 'terms:privacy' %}">Chính Sách Bảo Mật</a></li>
-          <li><a href="{% url 'faq' %}">Câu Hỏi Thường Gặp</a></li>
+          <li><a href="{% url 'movies:terms_general' %}">Điều Khoản Chung</a></li>
+          <li><a href="{% url 'movies:terms_transaction' %}">Điều khoản Giao Dịch</a></li>
+          <li><a href="{% url 'movies:terms_payment' %}">Chính Sách Thanh Toán</a></li>
+          <li><a href="{% url 'movies:terms_privacy' %}">Chính Sách Bảo Mật</a></li>
+          <li><a href="{% url 'movies:faq' %}">Câu Hỏi Thường Gặp</a></li>
         </ul>
       </div>
       <div>
