@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from users import views as user_views 
+from movies import views as movie_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,7 +27,7 @@ urlpatterns = [
     path('movies/', include('movies.urls', namespace="movies")),
     path('bookings/', include('bookings.urls', namespace="bookings")),
 
-    path('', user_views.home, name='home'),
+    path('', movie_views.home, name='home'),
 ]
 
 if settings.DEBUG:

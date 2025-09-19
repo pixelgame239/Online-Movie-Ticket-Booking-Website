@@ -5,7 +5,8 @@ from .forms import MovieForm, ShowtimeForm
 
 def admin_required(user):
     return user.is_authenticated and user.is_admin
-
+def home(request):
+    return render(request, 'index.html')
 def movie_list(request):
     movies = Movie.objects.all()
     query = request.GET.get('q')

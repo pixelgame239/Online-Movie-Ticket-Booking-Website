@@ -104,6 +104,7 @@
       line-height: 1.6;
     }
   </style>
+  <link rel="stylesheet" href="{% static '/style.css' %}">
 </head>
 <body>
   <!-- Header -->
@@ -117,9 +118,9 @@
       <img src="{% static 'images/User.png' %}" alt="icon">
       {% if user.is_authenticated %}
         <span>Xin chào, {{ user.username }}</span>
-        <a href="{% url 'users:logout' %}">Đăng xuất</a>
+        <a href="{% url 'users:user_logout' %}">Đăng xuất</a>
       {% else %}
-        <a href="{% url 'users:login' %}">Đăng nhập</a> /
+        <a href="{% url 'users:user_login' %}">Đăng nhập</a> /
         <a href="{% url 'users:register' %}">Đăng ký</a>
       {% endif %}
     </div>
