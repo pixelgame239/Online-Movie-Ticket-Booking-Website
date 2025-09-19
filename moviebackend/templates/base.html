@@ -126,13 +126,14 @@
     </div>
 
     <div class="navbar">
-      <div class="logo">Logo</div>
+      <a href="{% url 'home' %}" class="logo">Logo</a>
       <nav>
         <a href="{% url 'movies:movie_list' %}">Phim</a>
         <a href="{% url 'movies:movie_list' %}">Rạp Phim</a>
         <a href="{% url 'users:profile' %}">Thành viên</a>
       </nav>
     </div>
+
   </header>
 
   <!-- Nội dung -->
