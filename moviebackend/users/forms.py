@@ -11,13 +11,16 @@ class UserRegisterForm(UserCreationForm):
 
     birth_date = forms.DateField(
         widget=forms.DateInput(attrs={'type': 'date'}),
-        required=False, label="Ngày sinh"
+        required=False,
+        label="Ngày sinh"
     )
     gender = forms.ChoiceField(
         choices=[('M', 'Nam'), ('F', 'Nữ')],
         widget=forms.RadioSelect,
-        required=False, label="Giới tính"
+        required=False,
+        label="Giới tính"
     )
+    # để queryset = none ở khai báo, tránh query khi import
     region = forms.ModelChoiceField(queryset=Region.objects.none(), required=False, label="Khu vực")
     favorite_cinema = forms.ModelChoiceField(queryset=Cinema.objects.none(), required=False, label="Rạp yêu thích")
 
@@ -31,8 +34,10 @@ class UserRegisterForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # query lại mỗi lần tạo form
         self.fields['region'].queryset = Region.objects.all()
         self.fields['favorite_cinema'].queryset = Cinema.objects.all()
+
 
 class UserUpdateForm(UserChangeForm):
     password = None  
