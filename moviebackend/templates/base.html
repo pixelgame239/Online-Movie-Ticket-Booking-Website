@@ -135,6 +135,7 @@
       text-align: center;
     }
   </style>
+  <link rel="stylesheet" href="{% static '/style.css' %}">
 </head>
 <body>
   <!-- Header -->
@@ -146,9 +147,9 @@
       </a>
       {% if user.is_authenticated %}
         <span>Xin chào, {{ user.username }}</span>
-        <a href="{% url 'users:logout' %}">Đăng xuất</a>
+        <a href="{% url 'users:user_logout' %}">Đăng xuất</a>
       {% else %}
-        <a href="{% url 'users:login' %}">Đăng nhập</a> / 
+        <a href="{% url 'users:user_login' %}">Đăng nhập</a> /
         <a href="{% url 'users:register' %}">Đăng ký</a>
       {% endif %}
     </div>
@@ -156,8 +157,8 @@
     <div class="navbar">
       <div class="logo">Logo</div>
       <nav>
-        <a href="{% url 'movies:list' %}">Phim</a>
-        <a href="{% url 'movies:cinemas' %}">Rạp Phim</a>
+        <a href="{% url 'movies:movie_list' %}">Phim</a>
+        <a href="{% url 'movies:movie_list' %}">Rạp Phim</a>
         <a href="{% url 'users:profile' %}">Thành viên</a>
       </nav>
     </div>
@@ -175,14 +176,14 @@
         <h3>Rạp Việt Nam</h3>
       </div>
       <div>
-        <h3>Điều khoản sử dụng</h3>
-        <ul>
-          <li><a href="{% url 'movies:terms_general' %}">Điều Khoản Chung</a></li>
-          <li><a href="{% url 'movies:terms_transaction' %}">Điều khoản Giao Dịch</a></li>
-          <li><a href="{% url 'movies:terms_payment' %}">Chính Sách Thanh Toán</a></li>
-          <li><a href="{% url 'movies:terms_privacy' %}">Chính Sách Bảo Mật</a></li>
-          <li><a href="{% url 'movies:faq' %}">Câu Hỏi Thường Gặp</a></li>
-        </ul>
+      <h3>Điều khoản sử dụng</h3>
+      <ul>
+        <li><a href="#">Điều Khoản Chung</a></li>
+        <li><a href="#">Điều khoản Giao Dịch</a></li>
+        <li><a href="#">Chính Sách Thanh Toán</a></li>
+        <li><a href="#">Chính Sách Bảo Mật</a></li>
+        <li><a href="#">Câu Hỏi Thường Gặp</a></li>
+      </ul>
       </div>
       <div>
         <h3>Kết nối với chúng tôi</h3>

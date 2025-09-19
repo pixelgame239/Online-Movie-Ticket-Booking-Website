@@ -89,3 +89,7 @@ def cancel_booking(request, booking_id):
         messages.error(request, "Cannot cancel past showtime")
 
     return redirect('bookings:booking_history')
+@login_required
+def my_tickets_view(request):
+    bookings = Booking.objects.filter(customer=request.user)
+    return render(request, 'my_tickets.html', {'bookings': bookings})

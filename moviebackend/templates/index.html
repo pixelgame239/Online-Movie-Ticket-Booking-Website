@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Home page{% endblock %}
+{% block content %}
+  <!-- Slider -->
+  <div class="slider">
+    <div class="slide active">
+      <img src="borderlands.jpg" alt="Borderlands">
+    </div>
+    <!-- Add more slides if needed -->
+    <button class="prev">&#10094;</button>
+    <button class="next">&#10095;</button>
+  </div>
+
+  <!-- Now Showing -->
+  <section class="movies">
+    <h2>PHIM ĐANG CHIẾU</h2>
+    <div class="carousel">
+      <button class="prev">&#10094;</button>
+      <div class="movie-list">
+        <div class="movie-card">
+          <span class="tag t13">T13</span>
+          <div class="poster"></div>
+          <div class="info">
+            <p>Tên Phim</p>
+            <button class="btn-detail">Xem Chi Tiết</button>
+            <button class="btn-ticket">Mua Vé</button>
+          </div>
+        </div>
+        <div class="movie-card">
+          <span class="tag t18">T18</span>
+          <div class="poster"></div>
+        </div>
+        <div class="movie-card">
+          <span class="tag p">P</span>
+          <div class="poster"></div>
+        </div>
+        <div class="movie-card">
+          <span class="tag k">K</span>
+          <div class="poster"></div>
+        </div>
+      </div>
+      <button class="next">&#10095;</button>
+    </div>
+  </section>
+
+  <!-- Hot Movies -->
+  <section class="movies">
+    <h2>PHIM HOT</h2>
+    <div class="carousel">
+      <button class="prev">&#10094;</button>
+      <div class="movie-list">
+        <div class="movie-card">
+          <span class="tag t13">T13</span>
+          <div class="poster"></div>
+          <div class="info">
+            <p>Tên Phim</p>
+            <button class="btn-detail">Xem Chi Tiết</button>
+            <button class="btn-ticket">Mua Vé</button>
+          </div>
+        </div>
+        <div class="movie-card">
+          <span class="tag t18">T18</span>
+          <div class="poster"></div>
+        </div>
+        <div class="movie-card">
+          <span class="tag p">P</span>
+          <div class="poster"></div>
+        </div>
+        <div class="movie-card">
+          <span class="tag k">K</span>
+          <div class="poster"></div>
+        </div>
+      </div>
+      <button class="next">&#10095;</button>
+    </div>
+  </section>
+{% endblock %}
