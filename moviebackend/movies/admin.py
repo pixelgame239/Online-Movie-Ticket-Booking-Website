@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Movie, Cinema, Showtime
+from .models import Movie, Cinema, Showtime, Region
+
 
 @admin.register(Movie)
 class MovieAdmin(admin.ModelAdmin):
@@ -7,13 +8,21 @@ class MovieAdmin(admin.ModelAdmin):
     search_fields = ('title', 'genre')
     list_filter = ('genre', 'release_date')
 
+
 @admin.register(Cinema)
 class CinemaAdmin(admin.ModelAdmin):
     list_display = ('name', 'location')
     search_fields = ('name', 'location')
+
 
 @admin.register(Showtime)
 class ShowtimeAdmin(admin.ModelAdmin):
     list_display = ('movie', 'cinema', 'show_time')
     list_filter = ('cinema', 'movie')
     search_fields = ('movie__title', 'cinema__name')
+
+
+@admin.register(Region)
+class RegionAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)

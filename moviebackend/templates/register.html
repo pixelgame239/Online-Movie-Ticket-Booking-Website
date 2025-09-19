@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Đăng ký{% endblock %}
+
+{% block content %}
+<div class="register-container" style="max-width: 600px; margin: 40px auto; padding: 30px; border: 1px solid #ddd; border-radius: 10px; background: #fff;">
+    <h2 style="text-align: center; margin-bottom: 25px; font-size: 24px;">Đăng ký tài khoản</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- Email -->
+        <div style="margin-bottom: 15px;">
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div style="color: red;">{{ form.email.errors }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Phone -->
+        <div style="margin-bottom: 15px;">
+            {{ form.phone }}
+            {% if form.phone.errors %}
+                <div style="color: red;">{{ form.phone.errors }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Họ và Tên -->
+        <div style="margin-bottom: 15px;">
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div style="color: red;">{{ form.username.errors }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Mật khẩu -->
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <div style="flex: 1;">
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <div style="color: red;">{{ form.password1.errors }}</div>
+                {% endif %}
+            </div>
+            <div style="flex: 1;">
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <div style="color: red;">{{ form.password2.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Ngày sinh -->
+        <label style="display:block; margin-bottom:5px;">Ngày sinh</label>
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <select name="day" required>
+                <option value="">Ngày</option>
+                {% for d in days %}
+                    <option value="{{ d }}">{{ d }}</option>
+                {% endfor %}
+            </select>
+            <select name="month" required>
+                <option value="">Tháng</option>
+                {% for m in months %}
+                    <option value="{{ m }}">{{ m }}</option>
+                {% endfor %}
+            </select>
+            <select name="year" required>
+                <option value="">Năm</option>
+                {% for y in years %}
+                    <option value="{{ y }}">{{ y }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Giới tính -->
+        <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 20px;">
+            <label><input type="radio" name="gender" value="M" required> Nam</label>
+            <label><input type="radio" name="gender" value="F"> Nữ</label>
+        </div>
+
+        <!-- Khu vực -->
+        <div style="margin-bottom: 15px;">
+            {{ form.region }}
+        </div>
+
+        <!-- Rạp yêu thích -->
+        <div style="margin-bottom: 15px;">
+            {{ form.favorite_cinema }}
+        </div>
+
+        <!-- Nút đăng ký -->
+        <button type="submit" style="width: 100%; padding: 12px; background: #E52025; color: #fff; border: none; border-radius: 5px; font-size: 18px; font-weight: bold;">
+            ĐĂNG KÝ
+        </button>
+    </form>
+
+    <p style="margin-top: 20px; text-align: center;">
+        Đã có tài khoản? <a href="{% url 'users:user_login' %}">Đăng nhập ngay</a>
+    </p>
+</div>
+{% endblock %}

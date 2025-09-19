@@ -11,17 +11,45 @@ from .forms import UserRegisterForm, UserUpdateForm
 def home(request):
     return render(request, 'movie_list.html')
 
+from datetime import date
+
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            user = form.save(commit=False)
+
+            # Lấy dữ liệu ngày sinh từ select
+            day = request.POST.get('day')
+            month = request.POST.get('month')
+            year = request.POST.get('year')
+            if day and month and year:
+                try:
+                    user.birth_date = date(int(year), int(month), int(day))
+                except ValueError:
+                    user.birth_date = None  # tránh lỗi ngày không hợp lệ
+
+            # Lấy giới tính
+            gender = request.POST.get('gender')
+            if gender in ['M', 'F']:
+                user.gender = gender
+
+            user.save()
+
             messages.success(request, "Account created successfully!")
             login(request, user)
-            return redirect('home')  
+            return redirect('home')
     else:
         form = UserRegisterForm()
-    return render(request, 'register.html', {'form': form})
+
+    context = {
+        'form': form,
+        'days': range(1, 32),
+        'months': range(1, 13),
+        'years': range(1950, 2026),
+    }
+    return render(request, 'register.html', context)
+
 
 def user_login(request):
     if request.method == 'POST':

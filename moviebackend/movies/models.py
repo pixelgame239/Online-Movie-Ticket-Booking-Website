@@ -25,3 +25,10 @@ class Showtime(models.Model):
 
     def __str__(self):
         return f"{self.movie.title} at {self.cinema.name} - {self.show_time}"
+from django.db import models
+
+class Region(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
