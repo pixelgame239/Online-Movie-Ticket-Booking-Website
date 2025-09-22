@@ -4,8 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import User
 from .forms import UserRegisterForm, UserUpdateForm
-
-
+from django.core.mail import EmailMessage
 
 @login_required
 def home(request):
@@ -54,3 +53,12 @@ def profile(request):
     else:
         form = UserUpdateForm(instance=request.user)
     return render(request, 'profile.html', {'form': form})
+
+def send_html_email():
+    subject = 'HTML Email from Django'
+    message = 'This is a <b>HTML</b> email sent using Django.'
+    from_email = '20221580@eaut.edu.vn'
+    recipient_list = ['20221580@eaut.edu.vn']
+    email = EmailMessage(subject, message, from_email, recipient_list)
+    email.content_subtype = 'html'
+    email.send()
