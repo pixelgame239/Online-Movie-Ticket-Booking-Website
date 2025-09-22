@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.utils import timezone
 
 from movies.models import Showtime
-from .models import Booking, Payment, Seat, Ticket
+from .models import Booking, Seat
 
 
 @login_required
@@ -35,7 +35,7 @@ def select_seats(request, showtime_id):
             seat.save()
 
             # Tạo Ticket gắn seat này vào booking
-            Ticket.objects.create(
+            Booking.objects.create(
                 booking=booking,
                 showtime=showtime,
                 seat=seat,
@@ -52,7 +52,7 @@ def payment(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id, customer=request.user)
     if request.method == 'POST':
         method = request.POST.get('method')
-        Payment.objects.create(
+        Booking.objects.create(
             booking=booking,
             method=method,
             amount=booking.total_price,

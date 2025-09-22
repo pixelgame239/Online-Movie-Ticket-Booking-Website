@@ -11,8 +11,9 @@ class Movie(models.Model):
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE, related_name="movies")
     duration = models.PositiveIntegerField(help_text="Duration in minutes")
     description = models.TextField(blank=True)
-    poster = models.URLField(max_length=300, blank=True, null=True)
+    poster = models.ImageField(upload_to='movies/posters/', blank=True, null=True)
     release_date = models.DateField(null=True, blank=True)
+    ticket_price = models.DecimalField(max_digits=7, decimal_places=0, help_text="Price for watching at the cinema", default=0)
     buy_count = models.PositiveIntegerField(help_text="Amount of tickets sold for this movie", default=0)
 
     def __str__(self):

@@ -11,6 +11,15 @@
   <div class="auth-tabs">
     <a href="{% url 'users:user_login' %}" class="tab active">ĐĂNG NHẬP</a>
     <a href="{% url 'users:register' %}" class="tab">ĐĂNG KÝ</a>
+     {% if messages %}
+    <div>
+      {% for message in messages %}
+        <div>
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+    {% endif %}
   </div>
 
   <!-- Form -->

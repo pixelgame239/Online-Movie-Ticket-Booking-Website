@@ -3,10 +3,10 @@ from .models import Movie, Cinema, Showtime
 
 @admin.register(Movie)
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ('title', 'genre', 'duration', 'release_date')
+    list_display = ('title', 'genre', 'duration', 'description', 'release_date', 'poster', 'ticket_price', 'buy_count')
     search_fields = ('title', 'genre')
     list_filter = ('genre', 'release_date')
-
+    readonly_fields= ('buy_count',)
 @admin.register(Cinema)
 class CinemaAdmin(admin.ModelAdmin):
     list_display = ('name', 'location')

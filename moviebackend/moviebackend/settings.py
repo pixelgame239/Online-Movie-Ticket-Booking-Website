@@ -109,3 +109,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'user_login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+#Email
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Use SMTP backend for email sending
+EMAIL_HOST = 'smtp.gmail.com'  # Gmail SMTP server
+EMAIL_PORT = 587  # Gmail uses port 587 for TLS encryption
+EMAIL_USE_TLS = True  # Enable TLS encryption
+EMAIL_HOST_USER = '20221580@eaut.edu.vn'  # Your Gmail address
+EMAIL_HOST_PASSWORD = 'xaxr hdgb ajsd dkvk'  # Your app password (if using Gmail)
+DEFAULT_FROM_EMAIL = '20221580@eaut.edu.vn'  # The default sender address
