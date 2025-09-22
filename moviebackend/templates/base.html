@@ -3,108 +3,10 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Rạp Việt Nam{% endblock %}</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Inter, sans-serif;
-    }
-
-    /* Header */
-    .site-header {
-      width: 1440px;
-      margin: 0 auto;
-    }
-
-    .top-bar {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 27px;
-      height: 84px;
-      font-size: 28px;
-    }
-
-    .top-bar img {
-      width: 31px;
-      height: 31px;
-    }
-
-    .navbar {
-      height: 149px;
-      background: #FDF7DD;
-      border-top: 12px solid #E52025;
-      border-bottom: 12px solid #E52025;
-      display: flex;
-      align-items: center;
-      padding: 0 200px;
-      gap: 160px;
-    }
-
-    .navbar .logo {
-      width: 111px;
-      height: 84px;
-      background: #C3BBBB;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: bold;
-      font-size: 34px;
-    }
-
-    .navbar nav a {
-      font-size: 34px;
-      font-weight: bold;
-      text-decoration: none;
-      color: black;
-      margin-right: 40px;
-    }
-
-    /* Main */
-    main {
-      min-height: 400px;
-      padding: 20px 0;
-    }
-
-    /* Footer */
-    footer {
-      width: 1440px;
-      margin: 40px auto 0;
-      padding: 40px 200px;
-      box-sizing: border-box;
-      color: #636363;
-    }
-
-    .footer-columns {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 50px;
-    }
-
-    footer h3 {
-      font-size: 21px;
-      font-weight: 700;
-      margin-bottom: 15px;
-    }
-
-    footer ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    footer ul li {
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-
-    .company-info {
-      margin-top: 30px;
-      font-size: 18px;
-      line-height: 1.6;
-    }
-  </style>
-  <link rel="stylesheet" href="{% static '/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  {% block extra_css %}{% endblock %}
 </head>
 <body>
   <!-- Header -->
@@ -136,7 +38,6 @@
         {% endif %}
       </nav>
     </div>
-
   </header>
 
   <!-- Nội dung -->
@@ -151,14 +52,14 @@
         <h3>Rạp Việt Nam</h3>
       </div>
       <div>
-      <h3>Điều khoản sử dụng</h3>
-      <ul>
-        <li><a href="#">Điều Khoản Chung</a></li>
-        <li><a href="#">Điều khoản Giao Dịch</a></li>
-        <li><a href="#">Chính Sách Thanh Toán</a></li>
-        <li><a href="#">Chính Sách Bảo Mật</a></li>
-        <li><a href="#">Câu Hỏi Thường Gặp</a></li>
-      </ul>
+        <h3>Điều khoản sử dụng</h3>
+        <ul>
+          <li><a href="#">Điều Khoản Chung</a></li>
+          <li><a href="#">Điều khoản Giao Dịch</a></li>
+          <li><a href="#">Chính Sách Thanh Toán</a></li>
+          <li><a href="#">Chính Sách Bảo Mật</a></li>
+          <li><a href="#">Câu Hỏi Thường Gặp</a></li>
+        </ul>
       </div>
       <div>
         <h3>Kết nối với chúng tôi</h3>
@@ -184,5 +85,7 @@
       Địa chỉ: Lầu 2, số 7/28, Đường Thành Thái, Phường 14, Quận 10, Thành phố Hồ Chí Minh, Việt Nam
     </div>
   </footer>
+
+  {% block extra_js %}{% endblock %}
 </body>
 </html>
