@@ -1,21 +1,26 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import Movie, Cinema, Showtime
+from .models import Movie, Cinema, Showtime, Genre
 from .forms import MovieForm, ShowtimeForm
+from django.utils import timezone
 
 def admin_required(user):
     return user.is_authenticated and user.is_admin
 def home(request):
-    return render(request, 'index.html')
+    currentDate = timezone.now().date()
+    showTimesToday = Showtime.objects.filter(show_time__date=currentDate)
+    movies_now_showing = Movie.objects.filter(id__in=showTimesToday.values('movie_id')).distinct()
+    return render(request, 'index.html', {'movies_now_showing': movies_now_showing})
 def movie_list(request):
     movies = Movie.objects.all()
+    genres = Genre.objects.all()
     query = request.GET.get('q')
     genre = request.GET.get('genre')
     if query:
         movies = movies.filter(title__icontains=query)
     if genre:
-        movies = movies.filter(genre__icontains=genre)
-    return render(request, 'movie_list.html', {'movies': movies})
+        movies = movies.filter(genre=genre)
+    return render(request, 'movie_list.html', {'movies': movies, 'genres':genres})
 
 def movie_detail(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
@@ -65,3 +70,6 @@ def showtime_create(request):
     else:
         form = ShowtimeForm()
     return render(request, 'showtime_form.html', {'form': form})
+@login_required
+def buy_ticket(request):
+    pass

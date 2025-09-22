@@ -13,6 +13,7 @@ class Movie(models.Model):
     description = models.TextField(blank=True)
     poster = models.URLField(max_length=300, blank=True, null=True)
     release_date = models.DateField(null=True, blank=True)
+    buy_count = models.PositiveIntegerField(help_text="Amount of tickets sold for this movie", default=0)
 
     def __str__(self):
         return self.title

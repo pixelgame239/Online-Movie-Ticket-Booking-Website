@@ -11,10 +11,12 @@
       
       <select name="genre" style="padding:12px 15px; font-size:16px; border:1px solid #ccc; border-radius:6px;">
         <option value="">-- Thể loại --</option>
-        <option value="Hành động" {% if request.GET.genre == "Hành động" %}selected{% endif %}>Hành động</option>
-        <option value="Tình cảm" {% if request.GET.genre == "Tình cảm" %}selected{% endif %}>Tình cảm</option>
-        <option value="Hài" {% if request.GET.genre == "Hài" %}selected{% endif %}>Hài</option>
-        <option value="Kinh dị" {% if request.GET.genre == "Kinh dị" %}selected{% endif %}>Kinh dị</option>
+        {% for genre in genres %}
+          <option value="{{ genre.genre_name }}" {% if request.GET.genre == "{{ genre.genre_name }}" %}selected{% endif %}>{{ genre.genre_name }}</option>
+          <!-- <option value="Tình cảm" {% if request.GET.genre == "Tình cảm" %}selected{% endif %}>Tình cảm</option>
+          <option value="Hài" {% if request.GET.genre == "Hài" %}selected{% endif %}>Hài</option>
+          <option value="Kinh dị" {% if request.GET.genre == "Kinh dị" %}selected{% endif %}>Kinh dị</option> -->
+          {% endfor %}
       </select>
 
       <button type="submit" 
@@ -36,7 +38,7 @@
             <!-- Poster -->
             <a href="{% url 'movies:movie_detail' movie.id %}">
               {% if movie.poster %}
-                <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" 
+                <img src="{{ movie.poster }}" alt="{{ movie.title }}" 
                      style="width:100%; height:350px; object-fit:cover;">
               {% else %}
                 <div style="width:100%; height:350px; display:flex; justify-content:center; align-items:center; background:#f5f5f5; color:#666;">
