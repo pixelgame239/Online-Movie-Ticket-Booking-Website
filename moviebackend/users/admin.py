@@ -4,14 +4,14 @@ from .models import User
 
 class UserAdmin(BaseUserAdmin):
     # Các field hiển thị trong list
-    list_display = ("username", "email", "is_customer", "is_staff", "is_superuser")
-    list_filter = ("is_customer", "is_staff", "is_superuser")
+    list_display = ("username", "email", "is_customer", "is_superuser")
+    list_filter = ("is_customer", "is_superuser")
 
     # Form khi edit user
     fieldsets = (
         (None, {"fields": ("username", "password")}),
         ("Thông tin cá nhân", {"fields": ("first_name", "last_name", "email", "phone", "address", "birth_date", "gender", "favorite_cinema")}),
-        ("Phân quyền", {"fields": ("is_customer", "is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
+        ("Phân quyền", {"fields": ("is_customer", "is_active",  "is_superuser", "groups", "user_permissions")}),
         ("Thời gian", {"fields": ("last_login", "date_joined")}),
     )
 
@@ -19,7 +19,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             "classes": ("wide",),
-            "fields": ("username", "email", "password1", "password2", "is_customer", "is_staff", "is_superuser"),
+            "fields": ("username", "email", "password1", "password2", "is_customer",  "is_superuser"),
         }),
     )
 
