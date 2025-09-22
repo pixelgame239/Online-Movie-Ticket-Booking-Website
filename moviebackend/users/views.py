@@ -27,6 +27,9 @@ def user_login(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
+        if(username.lower().strip()=="guest"):
+            messages.error(request, "Invalid username or password")
+            return render(request, 'login.html')
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)

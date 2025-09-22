@@ -8,6 +8,15 @@
       <button class="tab active">Đăng Nhập</button>
       <button class="tab">Đăng Ký</button>
     </div>
+    {% if messages %}
+    <div>
+      {% for message in messages %}
+        <div>
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+    {% endif %}
 
     <!-- Form -->
     <form class="login-form" method="post">
