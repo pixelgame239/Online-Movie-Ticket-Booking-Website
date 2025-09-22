@@ -131,6 +131,9 @@
         <a href="{% url 'movies:movie_list' %}">Phim</a>
         <a href="{% url 'movies:movie_list' %}">Rạp Phim</a>
         <a href="{% url 'users:profile' %}">Thành viên</a>
+        {% if user.is_authenticated and user.is_admin %}
+          <a href="{% url 'admin:index' %}">Quản trị</a>
+        {% endif %}
       </nav>
     </div>
 
