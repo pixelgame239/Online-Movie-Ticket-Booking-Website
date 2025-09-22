@@ -18,42 +18,42 @@
   <!-- Form -->
   <form class="auth-form" method="post" novalidate>
     {% csrf_token %}
-    
+
     <label for="id_username">Tên người dùng</label>
     {{ form.username }}
-    {% if form.username.errors %}
-      <div class="text-danger">{{ form.username.errors }}</div>
-    {% endif %}
+    {% if form.username.errors %}<div class="text-danger">{{ form.username.errors }}</div>{% endif %}
 
     <label for="id_email">Email</label>
     {{ form.email }}
-    {% if form.email.errors %}
-      <div class="text-danger">{{ form.email.errors }}</div>
-    {% endif %}
+    {% if form.email.errors %}<div class="text-danger">{{ form.email.errors }}</div>{% endif %}
 
     <label for="id_phone">Số điện thoại</label>
     {{ form.phone }}
-    {% if form.phone.errors %}
-      <div class="text-danger">{{ form.phone.errors }}</div>
-    {% endif %}
+    {% if form.phone.errors %}<div class="text-danger">{{ form.phone.errors }}</div>{% endif %}
 
     <label for="id_address">Địa chỉ</label>
     {{ form.address }}
-    {% if form.address.errors %}
-      <div class="text-danger">{{ form.address.errors }}</div>
-    {% endif %}
+    {% if form.address.errors %}<div class="text-danger">{{ form.address.errors }}</div>{% endif %}
+
+    <label for="id_birth_date">Ngày sinh</label>
+    {{ form.birth_date }}
+    {% if form.birth_date.errors %}<div class="text-danger">{{ form.birth_date.errors }}</div>{% endif %}
+
+    <label for="id_gender">Giới tính</label>
+    {{ form.gender }}
+    {% if form.gender.errors %}<div class="text-danger">{{ form.gender.errors }}</div>{% endif %}
+
+    <label for="id_favorite_cinema">Rạp yêu thích</label>
+    {{ form.favorite_cinema }}
+    {% if form.favorite_cinema.errors %}<div class="text-danger">{{ form.favorite_cinema.errors }}</div>{% endif %}
 
     <label for="id_password1">Mật khẩu</label>
     {{ form.password1 }}
-    {% if form.password1.errors %}
-      <div class="text-danger">{{ form.password1.errors }}</div>
-    {% endif %}
+    {% if form.password1.errors %}<div class="text-danger">{{ form.password1.errors }}</div>{% endif %}
 
     <label for="id_password2">Nhập lại mật khẩu</label>
     {{ form.password2 }}
-    {% if form.password2.errors %}
-      <div class="text-danger">{{ form.password2.errors }}</div>
-    {% endif %}
+    {% if form.password2.errors %}<div class="text-danger">{{ form.password2.errors }}</div>{% endif %}
 
     <button type="submit" class="btn-auth">Đăng Ký</button>
     <a href="{% url 'users:user_login' %}" class="forgot">Đã có tài khoản? Đăng nhập</a>

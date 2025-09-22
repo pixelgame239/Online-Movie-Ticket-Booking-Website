@@ -1,95 +1,99 @@
-/* Container */
+/* Form chung */
 .auth-container {
-  max-width: 420px;
-  margin: 70px auto;
-  padding: 35px;
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px;
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
-  font-family: "Segoe UI", Arial, sans-serif;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
-/* Tabs */
 .auth-tabs {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 25px;
-  border-bottom: 2px solid #eee;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 .auth-tabs .tab {
   flex: 1;
   text-align: center;
-  padding: 12px 0;
-  text-decoration: none;
+  padding: 10px 0;
+  border-bottom: 2px solid transparent;
   font-weight: bold;
-  font-size: 15px;
+  text-decoration: none;
   color: #555;
-  transition: 0.3s;
 }
 
-.auth-tabs .tab:hover {
-  color: #000;
-}
-
-.auth-tabs .active {
-  color: #e50914;
-  border-bottom: 2px solid #e50914;
-}
-
-/* Form */
-.auth-form {
-  display: flex;
-  flex-direction: column;
+.auth-tabs .tab.active {
+  border-bottom: 2px solid #007bff;
+  color: #007bff;
 }
 
 .auth-form label {
+  display: block;
+  margin-top: 15px;
   font-size: 14px;
-  margin: 10px 0 6px;
+  font-weight: 500;
   color: #333;
 }
 
-.auth-form input {
-  padding: 12px;
+.auth-form input,
+.auth-form select,
+.auth-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  outline: none;
   font-size: 14px;
-  transition: border-color 0.3s;
+  outline: none;
+  transition: border-color 0.3s ease;
 }
 
-.auth-form input:focus {
-  border-color: #e50914;
+.auth-form input:focus,
+.auth-form select:focus,
+.auth-form textarea:focus {
+  border-color: #007bff;
 }
 
-/* Button */
+.auth-form textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
 .btn-auth {
-  margin-top: 20px;
+  width: 100%;
   padding: 12px;
-  background: #e50914;
+  margin-top: 20px;
+  background: #007bff;
   border: none;
-  border-radius: 6px;
   color: #fff;
-  font-size: 16px;
   font-weight: bold;
+  font-size: 15px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s ease;
 }
 
 .btn-auth:hover {
-  background: #b20710;
+  background: #0056b3;
 }
 
-/* Forgot password */
 .forgot {
   display: block;
+  text-align: center;
   margin-top: 15px;
   font-size: 13px;
-  text-align: center;
   color: #007bff;
   text-decoration: none;
 }
 
 .forgot:hover {
   text-decoration: underline;
+}
+
+.text-danger {
+  font-size: 13px;
+  color: red;
+  margin-top: 3px;
 }

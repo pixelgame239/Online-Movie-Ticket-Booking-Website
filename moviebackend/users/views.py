@@ -4,13 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import User
 from .forms import UserRegisterForm, UserUpdateForm
-from movies.models import Movie
+from movies.models import Cinema, Movie
 
 
 def home(request):
-    # Trang chủ hiển thị phim đang chiếu và phim hot
     movies_now_showing = Movie.objects.all().order_by('-release_date')[:6]
-    movies_hot = Movie.objects.all().order_by('?')[:6]  # random phim hot
+    movies_hot = Movie.objects.all().order_by('?')[:6]  
     return render(request, 'index.html', {
         'movies_now_showing': movies_now_showing,
         'movies_hot': movies_hot,
@@ -18,20 +17,22 @@ def home(request):
 
 
 def register(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_customer = True
-            user.is_staff = False
+            user.is_customer = True  
+            user.is_staff = False   
+            user.is_superuser = False 
             user.save()
             messages.success(request, "Tạo tài khoản thành công!")
+            
             login(request, user)
-            return redirect('home')
+            return redirect("home")
     else:
         form = UserRegisterForm()
-    return render(request, 'register.html', {'form': form})
-
+    
+    return render(request, "register.html", {"form": form})
 
 def user_login(request):
     if request.method == 'POST':
@@ -53,12 +54,23 @@ def user_logout(request):
 
 @login_required
 def profile(request):
+    return render(request, 'profile.html')
+
+
+@login_required
+def profile_edit(request):
     if request.method == 'POST':
-        form = UserUpdateForm(request.POST, instance=request.user)
+        form = UserUpdateForm(request.POST, request.FILES, instance=request.user)  # thêm request.FILES
         if form.is_valid():
             form.save()
-            messages.success(request, "Cập nhật hồ sơ thành công!")
-            return redirect('profile')
+            messages.success(request, "Cập nhật tài khoản thành công!")
+            return redirect('users:profile')
     else:
         form = UserUpdateForm(instance=request.user)
-    return render(request, 'profile.html', {'form': form})
+
+    cinemas = Cinema.objects.all()
+    return render(request, 'profile_edit.html', {
+        'form': form,
+        'cinemas': cinemas,
+        'avatar': request.user.avatar.url if request.user.avatar else None, 
+    })

@@ -102,8 +102,8 @@
 <div class="profile-container">
   <!-- Sidebar -->
   <div class="profile-sidebar">
-    <button class="active">THÔNG TIN CHUNG</button>
-    <button>CHI TIẾT TÀI KHOẢN</button>
+    <a href="{% url 'users:profile' %}"><button class="active">THÔNG TIN CHUNG</button></a>
+    <a href="{% url 'users:profile_edit' %}"><button>CHI TIẾT TÀI KHOẢN</button></a>
     <button>CÀI ĐẶT THANH TOÁN</button>
     <button>THẺ THÀNH VIÊN</button>
     <button>ĐIỂM THƯỞNG</button>
@@ -118,9 +118,14 @@
     <h2 style="background:#000; color:#fff; padding:10px;">THÔNG TIN CHUNG</h2>
 
     <div class="profile-header">
-      <img src="{% static 'images/User.png' %}" alt="avatar">
+      {% if user.avatar %}
+        <img src="{{ user.avatar.url }}" alt="avatar" style="width:120px; height:120px; object-fit:cover; border-radius:50%;">
+      {% else %}
+        <img src="{% static 'images/User.png' %}" alt="avatar" style="width:120px; height:120px; object-fit:cover; border-radius:50%;">
+      {% endif %}
+
       <div>
-        <button>THAY ĐỔI</button>
+        <a href="{% url 'users:profile_edit' %}"><button>THAY ĐỔI</button></a>
         <p>Xin chào <strong>{{ user.username }}</strong></p>
         <p>Với trang này bạn có thể quản lý tất cả thông tin tài khoản của mình</p>
       </div>
@@ -135,21 +140,8 @@
         <strong>Tổng chi tiêu</strong>
         <p>0 đ</p>
       </div>
-      <div class="profile-card">
-        <strong>Điểm CGV</strong>
-        <p>0 P</p>
-      </div>
-      <div class="profile-card">
-        <strong>Voucher</strong>
-        <p>0</p>
-        <button>Xem</button>
-      </div>
-      <div class="profile-card">
-        <strong>Coupon</strong>
-        <p>0</p>
-        <button>Xem</button>
-      </div>
     </div>
   </div>
 </div>
+
 {% endblock %}
