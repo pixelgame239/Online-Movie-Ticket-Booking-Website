@@ -11,6 +11,14 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'phone', 'address', 'password1', 'password2']
 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.is_staff = False 
+        if commit:
+            user.save()
+        return user
+
+
 class UserUpdateForm(UserChangeForm):
     password = None  
     email = forms.EmailField(required=True)

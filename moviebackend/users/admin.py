@@ -3,30 +3,27 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import User
 
 class UserAdmin(BaseUserAdmin):
-    list_display = ('username', 'email', 'is_customer', 'is_admin', 'is_superuser', 'is_active')
-    list_filter = ('is_customer', 'is_admin', 'is_superuser', 'is_active', 'groups')
+    # Các field hiển thị trong list
+    list_display = ("username", "email", "is_customer", "is_staff", "is_superuser")
+    list_filter = ("is_customer", "is_staff", "is_superuser")
 
+    # Form khi edit user
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
-        ('Personal info', {
-            'fields': (
-                'first_name', 'last_name', 'email',
-                'phone', 'address', 'birth_date', 'gender', 'favorite_cinema'
-            )
-        }),
-        ('Permissions', {
-            'fields': ('is_customer', 'is_admin', 'is_superuser', 'is_active', 'groups', 'user_permissions')
-        }),
+        (None, {"fields": ("username", "password")}),
+        ("Thông tin cá nhân", {"fields": ("first_name", "last_name", "email", "phone", "address", "birth_date", "gender", "favorite_cinema")}),
+        ("Phân quyền", {"fields": ("is_customer", "is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
+        ("Thời gian", {"fields": ("last_login", "date_joined")}),
     )
 
+    # Form khi tạo user
     add_fieldsets = (
         (None, {
-            'classes': ('wide',),
-            'fields': ('username', 'email', 'password1', 'password2', 'is_customer', 'is_admin')}
-        ),
+            "classes": ("wide",),
+            "fields": ("username", "email", "password1", "password2", "is_customer", "is_staff", "is_superuser"),
+        }),
     )
 
-    search_fields = ('username', 'email')
-    ordering = ('username',)
+    search_fields = ("username", "email")
+    ordering = ("username",)
 
 admin.site.register(User, UserAdmin)

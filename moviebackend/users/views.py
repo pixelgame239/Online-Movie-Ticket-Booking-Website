@@ -4,36 +4,47 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import User
 from .forms import UserRegisterForm, UserUpdateForm
+from movies.models import Movie
 
 
-
-@login_required
 def home(request):
-    return render(request, 'movie_list.html')
+    # Trang chủ hiển thị phim đang chiếu và phim hot
+    movies_now_showing = Movie.objects.all().order_by('-release_date')[:6]
+    movies_hot = Movie.objects.all().order_by('?')[:6]  # random phim hot
+    return render(request, 'index.html', {
+        'movies_now_showing': movies_now_showing,
+        'movies_hot': movies_hot,
+    })
+
 
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            messages.success(request, "Account created successfully!")
+            user = form.save(commit=False)
+            user.is_customer = True
+            user.is_staff = False
+            user.save()
+            messages.success(request, "Tạo tài khoản thành công!")
             login(request, user)
-            return redirect('home')  
+            return redirect('home')
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
 
+
 def user_login(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')  
+            return redirect('home')
         else:
-            messages.error(request, "Invalid username or password")
+            messages.error(request, "Sai tên đăng nhập hoặc mật khẩu")
     return render(request, 'login.html')
+
 
 def user_logout(request):
     logout(request)
@@ -46,7 +57,7 @@ def profile(request):
         form = UserUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, "Profile updated successfully")
+            messages.success(request, "Cập nhật hồ sơ thành công!")
             return redirect('profile')
     else:
         form = UserUpdateForm(instance=request.user)
