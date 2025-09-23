@@ -22,6 +22,7 @@ class Movie(models.Model):
 class Cinema(models.Model):
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=15, blank=True)
 
     def __str__(self):
         return self.name

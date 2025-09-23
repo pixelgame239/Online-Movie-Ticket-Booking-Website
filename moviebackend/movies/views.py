@@ -45,14 +45,22 @@ def movie_detail(request, pk):
         'showtimes': showtimes
     })
 def cinema_list(request):
-    cinemas = Cinema.objects.all().prefetch_related("showtimes__movie")
+    cinemas = Cinema.objects.prefetch_related('showtimes__movie')
 
     for cinema in cinemas:
-        showtimes = cinema.showtimes.all()
-        cinema.movies_list = list(set([s.movie.title for s in showtimes]))
-        cinema.showtime_count = showtimes.count()
+        # Lấy danh sách phim theo rạp
+        cinema.movie_titles = list({s.movie.title for s in cinema.showtimes.all()})
+        
+        # Lấy danh sách ngày có showtime duy nhất
+        cinema.show_dates = sorted({s.show_time.date() for s in cinema.showtimes.all()})
+        
+        # Gom showtimes theo ngày
+        cinema.showtimes_by_date = {}
+        for date in cinema.show_dates:
+            cinema.showtimes_by_date[date] = [s for s in cinema.showtimes.all() if s.show_time.date() == date]
 
     return render(request, "cinema_list.html", {"cinemas": cinemas})
+
 def cinema_detail(request, pk):
     cinema = get_object_or_404(Cinema, pk=pk)
     showtimes = cinema.showtimes.select_related('movie').order_by('show_time')
