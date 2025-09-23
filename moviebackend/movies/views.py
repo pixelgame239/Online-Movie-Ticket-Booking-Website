@@ -71,6 +71,5 @@ def showtime_create(request):
     else:
         form = ShowtimeForm()
     return render(request, 'showtime_form.html', {'form': form})
-@login_required
 def buy_ticket(request):
     pass

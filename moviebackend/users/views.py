@@ -64,6 +64,7 @@ def send_confirmation_email(user, request):
 def register(request):
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
+        mess = None
         if form.is_valid():
             user = form.save(commit=False)
             user.is_customer = True  
@@ -72,7 +73,6 @@ def register(request):
             user.save()
             send_confirmation_email(user,request)
             messages.success(request, "Hãy kiểm tra hộp thư của bạn để xác nhận tài khoản")
-            return redirect("register.html")
     else:
         form = UserRegisterForm()
     
