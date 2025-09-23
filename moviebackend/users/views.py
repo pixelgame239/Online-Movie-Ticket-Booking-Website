@@ -12,7 +12,9 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from django.http import Http404
+from django.http import Http404, HttpResponse
+from django.utils.encoding import force_bytes, force_str
+from django.contrib.auth.hashers import make_password
 
 @login_required
 def home(request):
@@ -64,7 +66,6 @@ def send_confirmation_email(user, request):
 def register(request):
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
-        mess = None
         if form.is_valid():
             user = form.save(commit=False)
             user.is_customer = True  
@@ -92,7 +93,62 @@ def user_login(request):
         else:
             messages.error(request, "Sai tên đăng nhập hoặc mật khẩu")
     return render(request, 'login.html')
+def send_password_reset_email(user, request):
+    subject = 'Khôi phục mật khẩu của bạn'
+    
+    # Generate UID and token
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = default_token_generator.make_token(user)
 
+    # Build reset link
+    domain = get_current_site(request).domain
+    path = reverse('users:password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+    reset_url = f"http://{domain}{path}"
+
+    # Render email HTML template
+    message = render_to_string('forget_password_email.html', {
+        'user': user,
+        'reset_url': reset_url,
+    })
+
+    # Send email
+    email = EmailMessage(subject, message, '20221580@eaut.edu.vn', [user.email])
+    email.content_subtype = 'html'  # Send as HTML
+    email.send()
+def password_reset_confirm(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (User.DoesNotExist, ValueError, TypeError, OverflowError):
+        user = None
+
+    if user and default_token_generator.check_token(user, token):
+        if request.method == 'POST':
+            password = request.POST.get('password')
+            user.password = make_password(password)
+            user.save()
+            messages.success(request, 'Mật khẩu đã được đặt lại thành công.')
+            return redirect('users:user_login')
+        return render(request, 'password_reset_form.html', {'user': user})
+    else:
+        return HttpResponse('Liên kết không hợp lệ hoặc đã hết hạn.')
+def forget_password(request):
+    if request.method=="POST":
+        username = request.POST['username']
+        if(username=="guest"):
+            messages.error(request, 'Tên đăng nhập không tồn tại.')
+            return render(request, 'forget_password.html')
+        try:
+            user = User.objects.get(username=username)
+            if user.email:
+                send_password_reset_email(user, request)
+                messages.success(request, 'Liên kết đặt lại mật khẩu đã được gửi đến email của bạn.')
+            else:
+                messages.error(request, 'Người dùng không có email đăng ký.')
+        except User.DoesNotExist:
+            messages.error(request, 'Tên đăng nhập không tồn tại.')
+        return redirect('users:forget_password')
+    return render(request, 'forget_password.html')
 
 def user_logout(request):
     logout(request)

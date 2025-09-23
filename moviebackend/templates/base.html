@@ -17,8 +17,11 @@
         <img src="{% static 'images/movie_ticket.png' %}" alt="Vé của tôi">
         <span>Vé của tôi</span>
       </a>
-
-      <img src="{% static 'images/User.png' %}" alt="Tài khoản">
+      {% if user.is_authenticated %}
+      <img src="{{ user.avatar.url }}" alt="Avatar">
+      {% else %}
+      <img src="{% static 'images/User.png' %}" alt="Avatar">
+      {% endif %}
       {% if user.is_authenticated %}
         <span>Xin chào, {{ user.username }}</span>
         <a href="{% url 'users:user_logout' %}">Đăng xuất</a>

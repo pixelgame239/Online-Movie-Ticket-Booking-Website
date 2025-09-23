@@ -1,9 +1,9 @@
-<p>Hi {{ user.username }},</p>
+<p>Hi <strong>{{ user.username }}</strong>,</p>
 
-<p>Thank you for registering! Please click the link below to confirm your account:</p>
+<p>Cảm ơn bạn đã đăng ký tài khoản tại website, bạn vui lòng bấm vào nút xác nhận để xác thực tài khoản:</p>
 
-<p><a href="{{ confirm_url }}">Confirm Account</a></p>
+<button style="border: none; border: 1px solid green; color: white; background-color: green; padding: 10px 20px; cursor: pointer;"><a href="{{ confirm_url }}" style="color: white; text-decoration: none; font-weight: bold;">Xác nhận</a></button>
 
-<p>If you didn’t register, please ignore this email.</p>
+<p style="font-style: italic;">Nếu không phải là bạn, vui lòng bỏ qua email này.</p>
 
-<p>Best regards,<br>Your Company</p>
+<p>Xem phim vui vẻ,<br>Admin</p>
