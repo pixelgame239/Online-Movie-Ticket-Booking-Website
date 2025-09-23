@@ -48,42 +48,42 @@ body {
 
 /* Navigation bar */
 .navbar {
-  height: 120px;
-  /* from first CSS */
-  background: #fdf7dd;
-  border-top: 8px solid #e52025;
-  border-bottom: 8px solid #e52025;
   display: flex;
   justify-content: space-between;
+  /* logo on left, menu on right */
   align-items: center;
-  padding: 0 100px;
-  /* from first CSS */
+  /* vertical centering */
+  background-color: #fff8e1;
+  /* same background */
+  padding: 10px 20px;
+  border-top: 4px solid #e52025;
+  border-bottom: 4px solid #e52025;
 }
 
-.navbar .logo {
-  font-size: 32px;
-  /* from first CSS */
-  font-weight: bold;
-  text-decoration: none;
-  color: #000;
+.navbar .logo-img {
+  height: 50px;
+  /* adjust to your logo */
+  width: auto;
+  display: block;
 }
 
 .navbar nav {
   display: flex;
-  gap: 60px;
-  /* from first CSS */
+  gap: 25px;
 }
 
 .navbar nav a {
-  font-size: 22px;
-  font-weight: bold;
+  font-size: 18px;
+  font-weight: 600;
   text-decoration: none;
   color: #000;
+  transition: color 0.2s ease;
 }
 
 .navbar nav a:hover {
   color: #e52025;
 }
+
 
 .user-links {
   display: flex;
@@ -337,4 +337,3 @@ footer ul li a:hover {
   background: #000;
   color: #fff;
 }
-

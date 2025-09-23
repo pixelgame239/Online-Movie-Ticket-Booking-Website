@@ -5,7 +5,7 @@
   padding: 30px;
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .auth-tabs {
@@ -25,8 +25,8 @@
 }
 
 .auth-tabs .tab.active {
-  border-bottom: 2px solid #007bff;
-  color: #007bff;
+  border-bottom: 2px solid #E80A0A;
+  color: #E80A0A;
 }
 
 .auth-form label {
@@ -40,7 +40,7 @@
 .auth-form input,
 .auth-form select,
 .auth-form textarea {
-  width: 100%;
+  width: 94%;
   padding: 10px;
   margin-top: 6px;
   border: 1px solid #ccc;
@@ -53,7 +53,7 @@
 .auth-form input:focus,
 .auth-form select:focus,
 .auth-form textarea:focus {
-  border-color: #007bff;
+  border-color: #E80A0A;
 }
 
 .auth-form textarea {
@@ -65,7 +65,7 @@
   width: 100%;
   padding: 12px;
   margin-top: 20px;
-  background: #007bff;
+  background: #E80A0A;
   border: none;
   color: #fff;
   font-weight: bold;
@@ -76,7 +76,7 @@
 }
 
 .btn-auth:hover {
-  background: #0056b3;
+  background: #E80A0A;
 }
 
 .forgot {

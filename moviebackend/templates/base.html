@@ -34,20 +34,21 @@
     </div>
 
     <div class="navbar">
-      <a href="{% url 'home' %}" class="logo">
-        <img src="{% static 'images/logo.png' %}" alt="Rạp Việt Nam Logo">
-      </a>
-      <nav>
-        <a href="{% url 'movies:movie_list' %}">Phim</a>
-        <a href="#">Rạp Phim</a>
-        {% if user.is_authenticated %}
-          <a href="{% url 'users:profile' %}">Thành viên</a>
-        {% endif %}
-        {% if user.is_authenticated and user.is_staff %}
-          <a href="{% url 'admin:index' %}">Quản trị</a>
-        {% endif %}
-        </nav>
-      </div>
+    <a href="{% url 'home' %}" class="logo">
+      <img class="logo-img" src="{% static 'images/logo.png' %}" alt="Rạp Việt Nam Logo">
+    </a>
+    <nav>
+      <a href="{% url 'movies:movie_list' %}">Phim</a>
+      <a href="#">Rạp Phim</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'users:profile' %}">Profile</a>
+      {% endif %}
+      {% if user.is_authenticated and user.is_staff %}
+        <a href="{% url 'admin:index' %}">Quản trị</a>
+      {% endif %}
+    </nav>
+    </div>
+
     </header>
 
     <!-- Nội dung -->
