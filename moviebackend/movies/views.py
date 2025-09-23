@@ -7,11 +7,12 @@ from django.utils import timezone
 def admin_required(user):
     return user.is_authenticated and user.is_admin
 def home(request):
-    currentDate = timezone.now().date()
-    showTimesToday = Showtime.objects.filter(show_time__date=currentDate)
-    movies_now_showing = Movie.objects.filter(id__in=showTimesToday.values('movie_id')).distinct()
+    currentDate = timezone.now()
+    showTimesUpNext = Showtime.objects.filter(show_time__gte=currentDate)
+    movie_id_up_next = list(showTimesUpNext.values_list('movie_id', flat=True))
+    movies_now_showing = Movie.objects.filter(id__in=showTimesUpNext.values('movie_id')).distinct()
     movies_hot = Movie.objects.filter(buy_count__gt=0).order_by('-buy_count')[:3]
-    return render(request, 'index.html', {'movies_now_showing': movies_now_showing, "movies_hot": movies_hot})
+    return render(request, 'index.html', {'movies_now_showing': movies_now_showing, "movies_hot": movies_hot, "movie_id_up_next":movie_id_up_next})
 def movie_list(request):
     movies = Movie.objects.all()
     genres = Genre.objects.all()
@@ -71,5 +72,3 @@ def showtime_create(request):
     else:
         form = ShowtimeForm()
     return render(request, 'showtime_form.html', {'form': form})
-def buy_ticket(request):
-    pass

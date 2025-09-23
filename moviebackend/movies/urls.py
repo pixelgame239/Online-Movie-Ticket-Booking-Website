@@ -10,5 +10,4 @@ urlpatterns = [
     path('<int:pk>/update/', views.movie_update, name='movie_update'),
     path('<int:pk>/delete/', views.movie_delete, name='movie_delete'),
     path('showtime/create/', views.showtime_create, name='showtime_create'),
-    path('buy_ticket/', views.buy_ticket, name='buy_ticket')
 ]

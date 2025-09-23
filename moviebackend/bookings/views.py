@@ -2,8 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
-
-from movies.models import Showtime
+from movies.models import Showtime, Movie
 from .models import Booking, Seat
 
 
@@ -93,3 +92,37 @@ def cancel_booking(request, booking_id):
 def my_tickets_view(request):
     bookings = Booking.objects.filter(customer=request.user)
     return render(request, 'my_tickets.html', {'bookings': bookings})
+
+from django.shortcuts import render, get_object_or_404
+from django.utils import timezone
+from movies.models import Movie, Showtime, Cinema  # adjust if needed
+
+def buy_ticket(request, movie_id):
+    movie = get_object_or_404(Movie, id=movie_id)
+    current_time = timezone.now()
+
+    # Get all cinemas with upcoming showtimes for this movie
+    cinema_ids = Showtime.objects.filter(
+        movie=movie,
+        show_time__gte=current_time
+    ).values_list('cinema_id', flat=True).distinct()
+    cinemas = Cinema.objects.filter(id__in=cinema_ids)
+
+    # Optional: filter showtimes by selected cinema
+    selected_cinema_id = request.GET.get('cinema')
+    showtimes = Showtime.objects.filter(
+        movie=movie,
+        show_time__gte=current_time
+    )
+    if selected_cinema_id:
+        showtimes = showtimes.filter(cinema_id=selected_cinema_id)
+
+    showtimes = showtimes.order_by('show_time')
+
+    return render(request, 'buy_ticket.html', {
+        'movie': movie,
+        'cinemas': cinemas,
+        'showtimes': showtimes,
+        'selected_cinema_id': int(selected_cinema_id) if selected_cinema_id else None
+    })
+

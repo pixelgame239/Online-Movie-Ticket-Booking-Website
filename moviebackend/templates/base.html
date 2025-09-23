@@ -13,10 +13,12 @@
   <!-- Header -->
   <header class="site-header">
     <div class="top-bar">
+      {% if user.is_authenticated %}
       <a href="{% url 'bookings:my_tickets' %}">
         <img src="{% static 'images/movie_ticket.png' %}" alt="Vé của tôi">
         <span>Vé của tôi</span>
       </a>
+      {% endif %}
       {% if user.is_authenticated %}
       <img src="{{ user.avatar.url }}" alt="Avatar">
       {% else %}
