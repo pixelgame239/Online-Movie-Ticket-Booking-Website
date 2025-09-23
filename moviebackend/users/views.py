@@ -13,6 +13,11 @@ from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.http import Http404
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.password_validation import password_validators_help_texts
+
+
 
 @login_required
 def home(request):
@@ -121,3 +126,19 @@ def profile_edit(request):
         'cinemas': cinemas,
         'avatar': request.user.avatar.url if request.user.avatar else None, 
     })
+@login_required
+def password_change(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # tránh logout sau khi đổi pass
+            messages.success(request, "Mật khẩu đã được thay đổi thành công!")
+            return redirect('users:password_change')
+        else:
+            messages.error(request, "Đổi mật khẩu thất bại. Vui lòng kiểm tra lại thông tin.")
+    else:
+        form = PasswordChangeForm(user=request.user)
+    password_requirements = password_validators_help_texts()
+
+    return render(request, 'password_change.html', {'form': form})
