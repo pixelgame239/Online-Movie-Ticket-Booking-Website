@@ -109,7 +109,14 @@
   <!-- Main content -->
   <div class="profile-main">
     <h2>THAY ĐỔI THÔNG TIN</h2>
-
+    <!-- Thông báo -->
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <div class="{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
     <form method="post" enctype="multipart/form-data" class="edit-form">
       {% csrf_token %}
 
