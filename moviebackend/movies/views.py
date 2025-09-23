@@ -1,8 +1,10 @@
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils import timezone
 from .models import Movie, Cinema, Showtime, Genre
-
+from .forms import MovieForm, ShowtimeForm
+def admin_required(user):
+    return user.is_staff
 def home(request):
     currentDate = timezone.now()
     showTimesUpNext = Showtime.objects.filter(show_time__gte=currentDate)

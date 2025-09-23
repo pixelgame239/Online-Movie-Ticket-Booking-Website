@@ -9,7 +9,6 @@ urlpatterns = [
     path('movies/<int:pk>/', views.movie_detail, name='movie_detail'),
     path('cinemas/', views.cinema_list, name='cinema_list'),
     path('cinemas/<int:pk>/', views.cinema_detail, name='cinema_detail'),
-    path('buy_ticket/', views.buy_ticket, name='buy_ticket'),
     path('', views.movie_list, name='movie_list'),
     path('<int:pk>/', views.movie_detail, name='movie_detail'),
     path('create/', views.movie_create, name='movie_create'),
