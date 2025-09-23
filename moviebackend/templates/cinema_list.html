@@ -7,55 +7,134 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-  <h2 class="mb-4">Danh sách rạp chiếu</h2>
+<div class="cinema-container">
 
-  {% if cinemas %}
-    <table class="table table-bordered table-striped align-middle">
-      <thead class="table-dark">
-        <tr>
-          <th style="width: 20%">Tên rạp</th>
-          <th style="width: 20%">Địa điểm</th>
-          <th style="width: 20%">Phim đang chiếu</th>
-          <th style="width: 15%">Số suất chiếu</th>
-          <th style="width: 25%">Hành động</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for cinema in cinemas %}
-          <tr>
-            <td>{{ cinema.name }}</td>
-            <td>{{ cinema.location }}</td>
-            <td>
-                {% if cinema.movies_list %}
-                <ul class="mb-0">
-                    {% for movie in cinema.movies_list|slice:":3" %}
-                    <li>{{ movie }}</li>
-                    {% endfor %}
-                </ul>
-                {% if cinema.movies_list|length > 3 %}
-                    <small>... và {{ cinema.movies_list|length|add:"-3" }} phim khác</small>
-                {% endif %}
-                {% else %}
-                <span class="text-muted">Chưa có phim</span>
-                {% endif %}
+  <!-- Tabs rạp phim -->
+  <div class="cinema-tabs">
+    <h4>Các rạp phim</h4>
+    <div class="cinema-tab-list">
+      {% for cinema in cinemas %}
+        <button class="cinema-tab {% if forloop.first %}active{% endif %}" data-target="cinema-{{ cinema.id }}">
+          {{ cinema.name }}
+        </button>
+      {% endfor %}
+    </div>
+  </div>
 
-            </td>
-            <td>{{ cinema.showtime_count }}</td>
-            <td>
-              <a href="{% url 'movies:cinema_detail' cinema.pk %}" class="btn btn-sm btn-primary">
-                Xem chi tiết
-              </a>
-              <a href="{% url 'movies:movie_list' %}?cinema={{ cinema.pk }}" class="btn btn-sm btn-outline-dark">
-                Suất chiếu
-              </a>
-            </td>
-          </tr>
+  <!-- Nội dung từng rạp -->
+  <div class="cinema-contents">
+   {% for cinema in cinemas %}
+  <div class="cinema-content {% if forloop.first %}active{% endif %}" id="cinema-{{ cinema.id }}">
+    <!-- Thông tin rạp -->
+    <div class="cinema-info">
+      <p>{{ cinema.name }} - {{ cinema.location }}</p>
+      <p>Hotline: {{ cinema.phone_number|default:"1900 000 000" }}</p>
+    </div>
+
+    <!-- Lịch chiếu -->
+    <div class="schedule">
+      <h4>Lịch Chiếu</h4>
+      <div class="date-slider">
+        <button class="arrow">&lt;</button>
+        <div class="dates">
+          {% for date in cinema.show_dates %}
+            <div class="date-item {% if forloop.first %}active{% endif %}" data-cinema="{{ cinema.id }}" data-date="{{ date }}">
+              <span>{{ date.day }}</span><br>
+              <small>Th{{ date.month }}</small>
+            </div>
+          {% endfor %}
+        </div>
+        <button class="arrow">&gt;</button>
+      </div>
+      <!-- Danh sách phim theo ngày -->
+      {% for date, showtimes in cinema.showtimes_by_date.items %}
+      <div class="movie-list movie-list-date" data-date="{{ date }}" {% if not forloop.first %}style="display:none"{% endif %}>
+        {% for s in showtimes %}
+        <div class="movie-block">
+          <div class="poster">
+            <a href="{% url 'movies:movie_detail' s.movie.id %}">
+              {% if s.movie.poster %}
+                <img src="{{ s.movie.poster.url }}" alt="{{ s.movie.title }}">
+              {% else %}
+                <img src="{% static 'images/placeholder_movie.png' %}" alt="{{ s.movie.title }}">
+              {% endif %}
+            </a>
+          </div>
+          <div class="movie-detail">
+            <h5 class="movie-title">
+              <a href="{% url 'movies:movie_detail' s.movie.id %}">{{ s.movie.title }}</a>
+            </h5>
+            <p><strong>Thể loại:</strong> {{ s.movie.genre.genre_name }}</p>
+            <p><strong>Thời lượng:</strong> {{ s.movie.duration }} phút</p>
+            <p><strong>Giá vé:</strong> {{ s.movie.ticket_price|floatformat:0 }} VNĐ</p>
+            <p><strong>Vé đã bán:</strong> {{ s.movie.buy_count }}</p>
+            {% if s.movie.description %}
+            <p><strong>Mô tả:</strong> {{ s.movie.description|truncatewords:25 }}</p>
+            {% endif %}
+            <div class="showtimes">
+              <strong>Giờ chiếu:</strong>
+              {% for st in showtimes %}
+                {% if st.movie.id == s.movie.id %}
+                  <button>{{ st.show_time|time:"H:i" }}</button>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
         {% endfor %}
-      </tbody>
-    </table>
-  {% else %}
-    <div class="alert alert-info">Chưa có rạp nào được thêm.</div>
-  {% endif %}
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+  {% endfor %}
+
+  </div>
 </div>
+
+<!-- JS để chuyển tab và ngày -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const tabs = document.querySelectorAll(".cinema-tab");
+  const contents = document.querySelectorAll(".cinema-content");
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", function () {
+      tabs.forEach(t => t.classList.remove("active"));
+      contents.forEach(c => c.classList.remove("active"));
+
+      tab.classList.add("active");
+      const target = document.getElementById(tab.dataset.target);
+      if (target) target.classList.add("active");
+    });
+  });
+
+  // Chọn ngày
+  const dateItems = document.querySelectorAll(".date-item");
+  dateItems.forEach(item => {
+    item.addEventListener("click", function () {
+      const parent = item.closest(".cinema-content");
+      const cinemaId = item.dataset.cinema;
+      const date = item.dataset.date;
+
+      // Chọn ngày active
+      parent.querySelectorAll(".date-item").forEach(d => d.classList.remove("active"));
+      item.classList.add("active");
+
+      // Hiển thị movie-list tương ứng
+      parent.querySelectorAll(".movie-list-date").forEach(list => {
+        if (list.dataset.date === date) list.style.display = "block";
+        else list.style.display = "none";
+      });
+    });
+  });
+});
+</script>
+
+<style>
+.cinema-content { display: none; }
+.cinema-content.active { display: block; }
+.date-item.active { background: red; color: white; }
+.movie-list-date { margin-bottom: 20px; }
+</style>
 {% endblock %}
