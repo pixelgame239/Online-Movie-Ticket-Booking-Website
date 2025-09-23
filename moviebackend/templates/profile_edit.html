@@ -97,7 +97,7 @@
   <div class="profile-sidebar">
     <a href="{% url 'users:profile' %}"><button>THÔNG TIN CHUNG</button></a>
     <a href="{% url 'users:profile_edit' %}"><button class="active">CHI TIẾT TÀI KHOẢN</button></a>
-    <button>CÀI ĐẶT THANH TOÁN</button>
+    <a href="{% url 'users:password_change' %}"><button >CÀI ĐẶT MẬT KHẨU</button></a>
     <button>THẺ THÀNH VIÊN</button>
     <button>ĐIỂM THƯỞNG</button>
     <button>THẺ QUÀ TẶNG</button>
@@ -109,7 +109,14 @@
   <!-- Main content -->
   <div class="profile-main">
     <h2>THAY ĐỔI THÔNG TIN</h2>
-
+    <!-- Thông báo -->
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <div class="{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
     <form method="post" enctype="multipart/form-data" class="edit-form">
       {% csrf_token %}
 
