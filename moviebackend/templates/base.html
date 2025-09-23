@@ -1,96 +1,112 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Rạp Việt Nam - Đặt vé xem phim trực tuyến, thông tin phim mới nhất, rạp chiếu và ưu đãi hấp dẫn.">
-  <title>{% block title %}Rạp Việt Nam{% endblock %}</title>
-  <link rel="stylesheet" href="{% static 'css/base.css' %}">
-  {% block extra_css %}{% endblock %}
-</head>
-<body>
-  <!-- Header -->
-  <header class="site-header">
-    <div class="top-bar">
-      <a href="{% url 'bookings:my_tickets' %}">
-        <img src="{% static 'images/movie_ticket.png' %}" alt="Vé của tôi">
-        <span>Vé của tôi</span>
-      </a>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Rạp Việt Nam{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    {%block extra_css %}{% endblock %}
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="site-header">
+      <div class="top-bar">
+        <a href="{% url 'bookings:my_tickets' %}">
+          <img src="{% static 'images/movie_ticket.png' %}" alt="icon" />
+          <span>Vé của tôi</span>
+        </a>
+        <div class="user-links">
+          <img src="{% static 'images/User.png' %}" alt="icon" />
+          {% if user.is_authenticated %}
+          <span>Xin chào, {{ user.username }}</span>
+          <a href="{% url 'users:user_logout' %}">Đăng xuất</a>
+          {% else %}
+          <div class="login-register">
+            <a href="{% url 'users:user_login' %}">Đăng nhập</a>
+            <span>/</span>
+            <a href="{% url 'users:register' %}">Đăng ký</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
 
-      <img src="{% static 'images/User.png' %}" alt="Tài khoản">
-      {% if user.is_authenticated %}
-        <span>Xin chào, {{ user.username }}</span>
-        <a href="{% url 'users:user_logout' %}">Đăng xuất</a>
-      {% else %}
-        <a href="{% url 'users:user_login' %}">Đăng nhập</a> /
-        <a href="{% url 'users:register' %}">Đăng ký</a>
-      {% endif %}
-    </div>
-
-    <div class="navbar">
-      <a href="{% url 'home' %}" class="logo">
-        <img src="{% static 'images/logo.png' %}" alt="Rạp Việt Nam Logo">
-      </a>
-      <nav>
-        <a href="{% url 'movies:movie_list' %}">Phim</a>
-        <a href="#">Rạp Phim</a>
+      <div class="navbar">
+        <a href="{% url 'home' %}" class="logo">CGV</a>
+        <nav>
+          <a href="{% url 'movies:movie_list' %}">Phim</a>
+          <a href="{% url 'movies:cinema_list' %}">Rạp Phim</a>
         {% if user.is_authenticated %}
           <a href="{% url 'users:profile' %}">Thành viên</a>
         {% endif %}
-        {% if user.is_authenticated and user.is_superuser %}
+        {% if user.is_authenticated and user.is_staff %}
           <a href="{% url 'admin:index' %}">Quản trị</a>
         {% endif %}
-      </nav>
-    </div>
-  </header>
-
-  <!-- Nội dung -->
-  <main>
-    {% block content %}{% endblock %}
-  </main>
-
-  <!-- Footer -->
-  <footer>
-    <div class="footer-columns">
-      <div>
-        <h3>Rạp Việt Nam</h3>
+        </nav>
       </div>
-      <div>
-        <h3>Điều khoản sử dụng</h3>
-        <ul>
-          <li><a href="#">Điều Khoản Chung</a></li>
-          <li><a href="#">Điều khoản Giao Dịch</a></li>
-          <li><a href="#">Chính Sách Thanh Toán</a></li>
-          <li><a href="#">Chính Sách Bảo Mật</a></li>
-          <li><a href="#">Câu Hỏi Thường Gặp</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Kết nối với chúng tôi</h3>
-        <ul>
-          <li><a href="#">Facebook</a></li>
-          <li><a href="#">Instagram</a></li>
-          <li><a href="#">Youtube</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Chăm Sóc Khách Hàng</h3>
-        <ul>
-          <li>Hotline: 1900 6017</li>
-          <li>Email: support@rapvietnam.vn</li>
-        </ul>
-      </div>
-    </div>
+    </header>
 
-    <div class="company-info">
-      <strong>Công ty Rạp Việt Nam</strong><br>
-      Giấy Chứng nhận đăng ký doanh nghiệp: 0303675393 đăng ký lần đầu ngày 31/7/2008,<br>
-      được cấp bởi Sở Kế hoạch và Đầu tư Thành phố Hồ Chí Minh<br>
-      Địa chỉ: Lầu 2, số 7/28, Đường Thành Thái, Phường 14, Quận 10, Thành phố Hồ Chí Minh, Việt Nam
-    </div>
-  </footer>
+    <!-- Nội dung -->
+    <main>{% block content %}{% endblock %}</main>
 
-  {% block extra_js %}{% endblock %}
-</body>
+    <!-- Footer -->
+    <footer>
+      <div class="footer-columns">
+        <div>
+          <h3>Rạp Việt Nam</h3>
+        </div>
+        <div>
+          <h3>Điều khoản sử dụng</h3>
+          <ul>
+            <li><a href="#">Điều Khoản Chung</a></li>
+            <li><a href="#">Điều khoản Giao Dịch</a></li>
+            <li><a href="#">Chính Sách Thanh Toán</a></li>
+            <li><a href="#">Chính Sách Bảo Mật</a></li>
+            <li><a href="#">Câu Hỏi Thường Gặp</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Kết nối với chúng tôi</h3>
+          <div class="social-links">
+            <a href="#">
+              <img src="{% static 'images/facebook.png' %}" alt="Facebook" />
+              Facebook
+            </a>
+            <a href="#">
+              <img src="{% static 'images/instagram.png' %}" alt="Instagram" />
+              Instagram
+            </a>
+            <a href="#">
+              <img src="{% static 'images/youtube.png' %}" alt="Youtube" />
+              Youtube
+            </a>
+            <a
+              href="https://www.moit.gov.vn/"
+              target="_blank"
+              rel="noopener"
+              class="moit-certification"
+            >
+              <img
+                src="{% static 'images/bocongthuong.png' %}"
+                alt="Đã thông báo Bộ Công Thương"
+              />
+            </a>
+          </div>
+        </div>
+        <div>
+          <h3>Chăm Sóc Khách Hàng</h3>
+          <ul>
+            <li>Hotline: 1900 0000</li>
+            <li>Email: support@rapvietnam.vn</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="company-info">
+        <strong>Công ty Rạp Việt Nam</strong><br />
+        Giấy Chứng nhận đăng ký doanh nghiệp: 0787464415 (16/2/2025)<br />
+        Cấp bởi: Sở Kế hoạch và Đầu tư TP. Hà Nội<br />
+        Địa chỉ: Bắc Từ Liêm, Hà Nội, Việt Nam<br />
+      </div>
+    </footer>
+  </body>
 </html>
