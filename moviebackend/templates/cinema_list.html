@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Danh sách rạp chiếu - Rạp Việt Nam{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cinema.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Danh sách rạp chiếu</h2>
+
+  {% if cinemas %}
+    <table class="table table-bordered table-striped align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th style="width: 20%">Tên rạp</th>
+          <th style="width: 20%">Địa điểm</th>
+          <th style="width: 20%">Phim đang chiếu</th>
+          <th style="width: 15%">Số suất chiếu</th>
+          <th style="width: 25%">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cinema in cinemas %}
+          <tr>
+            <td>{{ cinema.name }}</td>
+            <td>{{ cinema.location }}</td>
+            <td>
+                {% if cinema.movies_list %}
+                <ul class="mb-0">
+                    {% for movie in cinema.movies_list|slice:":3" %}
+                    <li>{{ movie }}</li>
+                    {% endfor %}
+                </ul>
+                {% if cinema.movies_list|length > 3 %}
+                    <small>... và {{ cinema.movies_list|length|add:"-3" }} phim khác</small>
+                {% endif %}
+                {% else %}
+                <span class="text-muted">Chưa có phim</span>
+                {% endif %}
+
+            </td>
+            <td>{{ cinema.showtime_count }}</td>
+            <td>
+              <a href="{% url 'movies:cinema_detail' cinema.pk %}" class="btn btn-sm btn-primary">
+                Xem chi tiết
+              </a>
+              <a href="{% url 'movies:movie_list' %}?cinema={{ cinema.pk }}" class="btn btn-sm btn-outline-dark">
+                Suất chiếu
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="alert alert-info">Chưa có rạp nào được thêm.</div>
+  {% endif %}
+</div>
+{% endblock %}
