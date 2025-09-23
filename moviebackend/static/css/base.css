@@ -1,3 +1,4 @@
+/* ========== BASE STYLES ========== */
 body {
   margin: 0;
   font-family: Inter, sans-serif;
@@ -7,76 +8,125 @@ body {
 
 /* ===== Header ===== */
 .site-header {
-  max-width: 1440px;
   width: 100%;
-  margin: 0 auto;
+  /* Full width */
+  margin: 0;
+  padding: 0;
 }
 
 /* Top bar */
 .top-bar {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
+  /* from first CSS */
   align-items: center;
-  gap: 27px;
-  height: 84px;
-  font-size: 20px;
+  gap: 25px;
+  /* from first CSS */
+  padding: 10px 40px;
+  /* from first CSS */
+  font-size: 16px;
+  /* from first CSS */
+  background: #fff;
+}
+
+.top-bar a {
+  text-decoration: none;
+  color: #000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
 }
 
 .top-bar img {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  /* from first CSS */
+  height: 24px;
+  /* from first CSS */
   vertical-align: middle;
 }
 
-/* Navbar */
+/* Navigation bar */
 .navbar {
-  height: 100px;
-  background: #FDF7DD;
-  border-top: 8px solid #E52025;
-  border-bottom: 8px solid #E52025;
+  height: 120px;
+  /* from first CSS */
+  background: #fdf7dd;
+  border-top: 8px solid #e52025;
+  border-bottom: 8px solid #e52025;
   display: flex;
-  align-items: center;
-  padding: 0 5%;
   justify-content: space-between;
+  align-items: center;
+  padding: 0 100px;
+  /* from first CSS */
 }
 
 .navbar .logo {
-  max-width: 100px;
-  max-height: 70px;
-  background: #C3BBBB;
+  font-size: 32px;
+  /* from first CSS */
+  font-weight: bold;
+  text-decoration: none;
+  color: #000;
+}
+
+.navbar nav {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  gap: 60px;
+  /* from first CSS */
 }
-.navbar .logo img {
-  max-width: 100%;
-  max-height: 100%;
-}
+
 .navbar nav a {
   font-size: 22px;
   font-weight: bold;
   text-decoration: none;
-  color: black;
-  margin-right: 30px;
+  color: #000;
 }
 
-.navbar nav a:last-child {
-  margin-right: 0;
+.navbar nav a:hover {
+  color: #e52025;
 }
 
-/* ===== Main ===== */
+.user-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-links img {
+  width: 24px;
+  height: 24px;
+}
+
+.login-register {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.login-register a {
+  text-decoration: none;
+  color: #000;
+}
+
+.login-register a:hover {
+  color: #e52025;
+}
+
+/* ===== MAIN ===== */
 main {
   min-height: 400px;
-  padding: 20px 5%;
+  padding: 20px 0;
+  /* from first CSS */
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 /* ===== Footer ===== */
 footer {
-  max-width: 1440px;
   width: 100%;
-  margin: 40px auto 0;
+  /* Full width */
+  margin: 0;
   padding: 40px 5%;
   box-sizing: border-box;
   color: #636363;
@@ -84,6 +134,9 @@ footer {
 }
 
 .footer-columns {
+  max-width: 1440px;
+  /* Keep content centered */
+  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 40px;
@@ -103,27 +156,65 @@ footer ul {
 }
 
 footer ul li {
-  font-size: 16px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  /* from first CSS */
+  font-size: 15px;
 }
 
 footer ul li a {
   text-decoration: none;
   color: #636363;
+  font-size: 15px;
 }
 
 footer ul li a:hover {
-  color: #E52025;
+  color: #e52025;
 }
 
 .company-info {
-  margin-top: 30px;
-  font-size: 15px;
+  border-top: 1px solid #ddd;
+  /* from first CSS */
+  padding-top: 20px;
+  /* from first CSS */
+  font-size: 14px;
+  /* from first CSS */
   line-height: 1.6;
   text-align: center;
 }
 
-/* ===== Responsive ===== */
+/* Footer icons */
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.social-links a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: #636363;
+  font-size: 15px;
+}
+
+.social-links a:hover {
+  color: #e52025;
+}
+
+.social-links img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.social-links .moit-certification img {
+  width: auto;
+  height: 50px;
+  margin-top: 10px;
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .top-bar {
     font-size: 16px;
@@ -136,7 +227,6 @@ footer ul li a:hover {
     height: auto;
     padding: 15px;
   }
-
 
   .navbar nav a {
     font-size: 18px;
@@ -151,49 +241,8 @@ footer ul li a:hover {
     padding: 20px;
   }
 }
-/* ===== Slider ===== */
-.slider {
-  position: relative;
-  width: 100%;
-  max-height: 500px;
-  overflow: hidden;
-  margin-bottom: 50px;
-}
 
-.slider img {
-  width: 100%;
-  height: 500px;
-  object-fit: cover;
-}
-
-.slide {
-  display: none;
-}
-
-.slide.active {
-  display: block;
-}
-
-.slider button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
-  color: #fff;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  padding: 10px 15px;
-}
-
-.slider .prev {
-  left: 20px;
-}
-.slider .next {
-  right: 20px;
-}
-
-/* ===== Movies Section ===== */
+/* ===== MOVIES SECTION ===== */
 .movies {
   margin-bottom: 60px;
 }
@@ -201,7 +250,7 @@ footer ul li a:hover {
 .movies h2 {
   font-size: 28px;
   font-weight: 700;
-  color: #E52025;
+  color: #e52025;
   margin-bottom: 25px;
   text-align: center;
 }
@@ -226,7 +275,7 @@ footer ul li a:hover {
   border-radius: 10px;
   overflow: hidden;
   background: #fff;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
@@ -250,7 +299,7 @@ footer ul li a:hover {
   position: absolute;
   top: 0;
   left: 0;
-  background: #E52025;
+  background: #e52025;
   color: #fff;
   padding: 5px 10px;
   font-size: 14px;
@@ -280,7 +329,7 @@ footer ul li a:hover {
 }
 
 .btn-detail {
-  background: #E52025;
+  background: #e52025;
   color: #fff;
 }
 
@@ -288,3 +337,4 @@ footer ul li a:hover {
   background: #000;
   color: #fff;
 }
+
