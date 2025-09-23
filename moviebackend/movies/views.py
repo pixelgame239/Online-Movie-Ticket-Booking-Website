@@ -10,7 +10,8 @@ def home(request):
     currentDate = timezone.now().date()
     showTimesToday = Showtime.objects.filter(show_time__date=currentDate)
     movies_now_showing = Movie.objects.filter(id__in=showTimesToday.values('movie_id')).distinct()
-    return render(request, 'index.html', {'movies_now_showing': movies_now_showing})
+    movies_hot = Movie.objects.filter(buy_count__gt=0).order_by('-buy_count')[:3]
+    return render(request, 'index.html', {'movies_now_showing': movies_now_showing, "movies_hot": movies_hot})
 def movie_list(request):
     movies = Movie.objects.all()
     genres = Genre.objects.all()
