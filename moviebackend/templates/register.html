@@ -14,7 +14,13 @@
     <a href="{% url 'users:user_login' %}" class="tab">ĐĂNG NHẬP</a>
     <a href="{% url 'users:register' %}" class="tab active">ĐĂNG KÝ</a>
   </div>
-
+  {% if messages %}
+    <div class="alert alert-success">
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
   <!-- Form -->
   <form class="auth-form" method="post" novalidate>
     {% csrf_token %}
