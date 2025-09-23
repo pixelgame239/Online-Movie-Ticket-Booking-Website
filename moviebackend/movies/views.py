@@ -4,21 +4,12 @@ from django.utils import timezone
 from .models import Movie, Cinema, Showtime, Genre
 
 def home(request):
-    current_date = timezone.now().date()
-    show_times_today = Showtime.objects.filter(show_time__date=current_date)
-
-    movies_now_showing = Movie.objects.filter(
-        id__in=show_times_today.values('movie_id')
-    ).distinct()
-
+    currentDate = timezone.now()
+    showTimesUpNext = Showtime.objects.filter(show_time__gte=currentDate)
+    movie_id_up_next = list(showTimesUpNext.values_list('movie_id', flat=True))
+    movies_now_showing = Movie.objects.filter(id__in=showTimesUpNext.values('movie_id')).distinct()
     movies_hot = Movie.objects.filter(buy_count__gt=0).order_by('-buy_count')[:3]
-
-    return render(request, 'index.html', {
-        'movies_now_showing': movies_now_showing,
-        'movies_hot': movies_hot
-    })
-
-
+    return render(request, 'index.html', {'movies_now_showing': movies_now_showing, "movies_hot": movies_hot})
 def movie_list(request):
     movies = Movie.objects.all()
     genres = Genre.objects.all()
@@ -63,6 +54,13 @@ def cinema_detail(request, pk):
 
 
 @login_required
-def buy_ticket(request):
-    # TODO: sau này làm chức năng đặt vé
-    return render(request, 'buy_ticket.html')
+@user_passes_test(admin_required)
+def showtime_create(request):
+    if request.method == 'POST':
+        form = ShowtimeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('movie_list')
+    else:
+        form = ShowtimeForm()
+    return render(request, 'showtime_form.html', {'form': form})
