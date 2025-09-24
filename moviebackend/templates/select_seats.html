@@ -92,25 +92,24 @@
     <h3>Người/ Ghế</h3>
     <div>SCREEN</div>
     <div class="seats">
-      {% for seat in seats %}
+      {% for seat in seat_numbers %}
         <label>
           <input type="checkbox" name="seats" value="{{ seat.seat_number }}" {% if seat.is_booked %}disabled{% endif %} hidden>
-          <div class="seat {% if seat.is_booked %}booked{% endif %}">{{ seat.seat_number }}</div>
+          <div class="seat {% if seat.is_booked %}booked{% endif %}">{{ seat }}</div>
         </label>
       {% endfor %}
     </div>
     <div class="legend">
-      <div><span style="background:#d9534f"></span> Đã chọn</div>
-      <div><span style="background:#5bc77b"></span> Thường</div>
-      <div><span style="background:#f0ad4e"></span> VIP</div>
-      <div><span style="background:#ccc"></span> Không thể chọn</div>
+      <div><span style="background:#d9534f"></span> Đã chọn bởi người xem khác</div>
+      <div><span style="background:#5bc77b"></span> Trống</div>
+      <div><span style="background:#cccccc"></span> Ghế bạn đang chọn</div>
     </div>
   </div>
   <div class="summary">
     <div class="poster">ảnh phim</div>
     <div>
       <p><strong>Tên phim:</strong> {{ showtime.movie.title }}</p>
-      <p><strong>Giá tiền:</strong> 0,00đ</p>
+      <p><strong>Giá tiền:</strong> {{ showtime.movie.ticket_price }}</p>
       <p><strong>Tag:</strong> {{ showtime.movie.genre }}</p>
       <button type="submit" class="btn">Xác nhận ghế</button>
     </div>

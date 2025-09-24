@@ -20,7 +20,7 @@
       </a>
       {% endif %}
       {% if user.is_authenticated %}
-      <img src="{{ user.avatar.url }}" alt="Avatar">
+      <img src="{{ user.avatar }}" alt="Avatar">
       {% else %}
       <img src="{% static 'images/User.png' %}" alt="Avatar">
       {% endif %}

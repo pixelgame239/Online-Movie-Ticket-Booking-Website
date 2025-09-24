@@ -2,48 +2,54 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
-from movies.models import Showtime, Movie
+from movies.models import Showtime, Movie, Cinema
 from .models import Booking, Seat
-
 
 @login_required
 def select_seats(request, showtime_id):
     showtime = get_object_or_404(Showtime, id=showtime_id)
-    seats = showtime.seats.all().order_by('seat_number')
-
+    seat_numbers = list(range(1,43))
+    booked_seats = Seat.objects.filter(showtime=showtime)
+    booked_seat_numbers = [seat.seat_number for seat in booked_seats]
     if request.method == 'POST':
         selected_seats = request.POST.getlist('seats')
+        
         if not selected_seats:
-            messages.error(request, "You must select at least one seat")
+            messages.error(request, "You must select at least one seat.")
             return redirect('bookings:select_seats', showtime_id=showtime.id)
 
         booking = Booking.objects.create(
             customer=request.user,
             showtime=showtime,
-            total_price=len(selected_seats) * 100.00  # giá demo
+            total_price=len(selected_seats) * 100.00  # Demo price
         )
 
         for seat_num in selected_seats:
-            seat = Seat.objects.get(showtime=showtime, seat_number=seat_num)
-            if seat.is_booked:
-                messages.error(request, f"Seat {seat_num} already booked")
+            if int(seat_num) in booked_seat_numbers:
+                messages.error(request, f"Seat {seat_num} is already booked.")
                 booking.delete()
                 return redirect('bookings:select_seats', showtime_id=showtime.id)
 
+            # Mark seat as booked
+            seat = Seat.objects.get(showtime=showtime, seat_number=seat_num)
             seat.is_booked = True
             seat.save()
 
-            # Tạo Ticket gắn seat này vào booking
+            # Create ticket for the booking
             Booking.objects.create(
                 booking=booking,
                 showtime=showtime,
                 seat=seat,
-                price=100.00  # giá demo, có thể lấy từ showtime
+                price=100.00  # Demo price
             )
 
         return redirect('bookings:payment', booking_id=booking.id)
 
-    return render(request, 'select_seats.html', {'showtime': showtime, 'seats': seats})
+    return render(request, 'select_seats.html', {
+        'showtime': showtime,
+        'seat_numbers': seat_numbers,
+        'booked_seat_numbers': booked_seat_numbers  # Pass booked seat numbers to the template
+    })
 
 
 @login_required
@@ -92,10 +98,6 @@ def cancel_booking(request, booking_id):
 def my_tickets_view(request):
     bookings = Booking.objects.filter(customer=request.user)
     return render(request, 'my_tickets.html', {'bookings': bookings})
-
-from django.shortcuts import render, get_object_or_404
-from django.utils import timezone
-from movies.models import Movie, Showtime, Cinema  # adjust if needed
 
 def buy_ticket(request, movie_id):
     movie = get_object_or_404(Movie, id=movie_id)
