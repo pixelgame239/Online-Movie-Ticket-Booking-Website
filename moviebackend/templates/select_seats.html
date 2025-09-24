@@ -45,7 +45,7 @@
     background: #d9534f; /* đã chọn */
     cursor: not-allowed;
   }
-  .seat.vip {
+  .seat.temp {
     background: #f0ad4e; /* vip */
   }
   .legend {
@@ -75,8 +75,11 @@
   .summary .poster {
     width: 120px;
     height: 150px;
-    background: #aaa;
   }
+  .seat-checkbox {
+  display: none;
+}
+
 </style>
 
 <div class="booking-header">BOOKING ONLINE</div>
@@ -85,7 +88,9 @@
   Cinema {{ showtime.cinema.name }} | Số ghế: {{ seats.count }}/{{ seats.count }}<br>
   {{ showtime.start_time|date:"d/m/Y H:i" }} - {{ showtime.end_time|date:"d/m/Y H:i" }}
 </div>
-
+{% for message in messages %}
+<p>{{ message }}</p>
+{% endfor %}
 <form method="POST">
   {% csrf_token %}
   <div class="seat-map">
@@ -94,25 +99,80 @@
     <div class="seats">
       {% for seat in seat_numbers %}
         <label>
-          <input type="checkbox" name="seats" value="{{ seat.seat_number }}" {% if seat.is_booked %}disabled{% endif %} hidden>
-          <div class="seat {% if seat.is_booked %}booked{% endif %}">{{ seat }}</div>
+          <input type="checkbox" name="seats" value="{{ seat }}" {% if seat in booked_seat_numbers %}disabled{% endif %} class="seat-checkbox">
+          <div class="seat {% if seat in booked_seat_numbers %}booked{% endif %}" data-seat-number="{{ seat }}">{{ seat }}</div>
         </label>
       {% endfor %}
     </div>
     <div class="legend">
       <div><span style="background:#d9534f"></span> Đã chọn bởi người xem khác</div>
       <div><span style="background:#5bc77b"></span> Trống</div>
-      <div><span style="background:#cccccc"></span> Ghế bạn đang chọn</div>
+      <div><span style="background:#f0ad4e"></span> Ghế bạn đang chọn</div>
     </div>
   </div>
-  <div class="summary">
-    <div class="poster">ảnh phim</div>
-    <div>
-      <p><strong>Tên phim:</strong> {{ showtime.movie.title }}</p>
-      <p><strong>Giá tiền:</strong> {{ showtime.movie.ticket_price }}</p>
-      <p><strong>Tag:</strong> {{ showtime.movie.genre }}</p>
-      <button type="submit" class="btn">Xác nhận ghế</button>
+  <select name="payment_method">
+    <option value="banking">Banking</option>
+    <option value="momo">Momo</option>
+    <option value="card">Card</option>
+  </select>
+  <div>
+    <div class="summary">
+      <div class="poster">
+        <img src="{{ showtime.movie.poster }}" style="height: 100%;">
+      </div>
+      <div>
+        <p><strong>Tên phim:</strong> {{ showtime.movie.title }}</p>
+        <p><strong>Giá tiền (1 ghế):</strong> {{ showtime.movie.ticket_price }}</p>
+        <p><strong>Tag:</strong> {{ showtime.movie.genre }}</p>
+        <button type="submit" class="btn">Xác nhận ghế</button>
+      </div>
     </div>
+    <p><strong>Tổng tiền:</strong> <span id="total-price">0</span> VND</p>
   </div>
 </form>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const seatLabels = document.querySelectorAll(".seats label");
+    const totalPriceDisplay = document.getElementById("total-price");
+    const submitBtn = document.querySelector("button[type=submit]");
+    const ticketPrice = {{ showtime.movie.ticket_price }}; // Django injects price
+
+    function updateSummary() {
+      const checkedSeats = document.querySelectorAll(".seat-checkbox:checked");
+      const totalPrice = checkedSeats.length * ticketPrice;
+      totalPriceDisplay.textContent = totalPrice.toLocaleString();
+      submitBtn.disabled = checkedSeats.length === 0;
+    }
+
+    seatLabels.forEach(label => {
+      const checkbox = label.querySelector("input[type=checkbox]");
+      const seatDiv = label.querySelector(".seat");
+
+      // Skip already booked seats
+      if (seatDiv.classList.contains("booked")) return;
+
+      seatDiv.addEventListener("click", function (e) {
+        e.preventDefault(); // prevent label auto-toggle
+
+        // Toggle checkbox state
+        checkbox.checked = !checkbox.checked;
+
+        // Toggle CSS class
+        if (checkbox.checked) {
+          seatDiv.classList.add("temp");
+        } else {
+          seatDiv.classList.remove("temp");
+        }
+
+        updateSummary();
+      });
+    });
+
+    updateSummary();
+  });
+</script>
+
+
+
+
 {% endblock %}

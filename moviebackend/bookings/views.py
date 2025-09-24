@@ -10,9 +10,12 @@ def select_seats(request, showtime_id):
     showtime = get_object_or_404(Showtime, id=showtime_id)
     seat_numbers = list(range(1,43))
     booked_seats = Seat.objects.filter(showtime=showtime)
-    booked_seat_numbers = [seat.seat_number for seat in booked_seats]
+    booked_seat_numbers = [int(seat.seat_number) for seat in booked_seats]
     if request.method == 'POST':
         selected_seats = request.POST.getlist('seats')
+        print(request.POST)
+        payment_method  = request.POST['payment_method']
+        print(selected_seats)
         
         if not selected_seats:
             messages.error(request, "You must select at least one seat.")
@@ -21,27 +24,15 @@ def select_seats(request, showtime_id):
         booking = Booking.objects.create(
             customer=request.user,
             showtime=showtime,
-            total_price=len(selected_seats) * 100.00  # Demo price
+            total_price=len(selected_seats) * showtime.movie.ticket_price, 
+            customer_name= request.user.username if request.user else 'Guest',
+            seats_booked=selected_seats,
+            payment_method=payment_method
         )
-
-        for seat_num in selected_seats:
-            if int(seat_num) in booked_seat_numbers:
-                messages.error(request, f"Seat {seat_num} is already booked.")
-                booking.delete()
-                return redirect('bookings:select_seats', showtime_id=showtime.id)
-
-            # Mark seat as booked
-            seat = Seat.objects.get(showtime=showtime, seat_number=seat_num)
+        for seatBooked in selected_seats:
+            seat = Seat.objects.create(showtime=showtime, seat_number=int(seatBooked))
             seat.is_booked = True
             seat.save()
-
-            # Create ticket for the booking
-            Booking.objects.create(
-                booking=booking,
-                showtime=showtime,
-                seat=seat,
-                price=100.00  # Demo price
-            )
 
         return redirect('bookings:payment', booking_id=booking.id)
 
