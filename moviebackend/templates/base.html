@@ -16,7 +16,11 @@
           <span>Vé của tôi</span>
         </a>
         <div class="user-links">
+          {% if user.is_authenticated %}
+          <img src="{{ user.avatar }}" alt="icon" />
+          {% else %}
           <img src="{% static 'images/User.png' %}" alt="icon" />
+          {% endif %}
           {% if user.is_authenticated %}
           <span>Xin chào, {{ user.username }}</span>
           <a href="{% url 'users:user_logout' %}">Đăng xuất</a>

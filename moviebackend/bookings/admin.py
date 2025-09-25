@@ -30,7 +30,10 @@ class BookingAdmin(admin.ModelAdmin):
             # Only send email if status changes from 'pending' to 'confirmed'
             if old_status == 'pending' and new_status == 'confirmed':
                 self.send_confirmation_booking(obj, request)
-
+                num_seats = len(obj.seats_booked) if obj.seats_booked else 0
+                movie = obj.showtime.movie
+                movie.buy_count += num_seats
+                movie.save()
         super().save_model(request, obj, form, change)
 
     def send_confirmation_booking(self, booking, request):
