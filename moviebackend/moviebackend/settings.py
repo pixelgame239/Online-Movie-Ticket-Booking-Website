@@ -13,6 +13,10 @@ SECRET_KEY = 'django-insecure-3f31*p3*f=_il7d(t&25-9t4qfy21o5_)31&fvhq**7lr4o1-d
 DEBUG = True
 ALLOWED_HOSTS = ["online-movie-ticket-booking-website.onrender.com", 'localhost', '127.0.0.1', "online-movie-ticket-booking-website-production.up.railway.app", "https://anmoviesweb.pythonanywhere.com","*"]
 
+CSRF_TRUSTED_ORIGINS = [
+    # Existing origins (if any)
+    "https://online-movie-ticket-booking-website-production.up.railway.app",
+]
 # --- INSTALLED APPS ---
 INSTALLED_APPS = [
     'django.contrib.admin',
