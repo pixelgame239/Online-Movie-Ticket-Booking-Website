@@ -168,10 +168,10 @@
 
       <div>
         <label for="id_avatar">Ảnh đại diện</label>
-        {{ form.avatar }}
+        {{ form.upload_avatar }}
         {% if user.avatar %}
           <br>
-          <img src="{{ user.avatar.url }}" alt="avatar hiện tại"
+          <img src="{{ user.avatar }}" alt="avatar hiện tại"
                style="width:100px; height:100px; object-fit:cover; border-radius:50%; margin-top:10px;">
         {% endif %}
       </div>

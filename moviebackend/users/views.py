@@ -18,6 +18,8 @@ from django.contrib.auth.password_validation import password_validators_help_tex
 from django.http import Http404, HttpResponse
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.hashers import make_password
+from utils.supabase import upload_to_supabase
+import os
 
 @login_required
 def home(request):
@@ -168,9 +170,24 @@ def profile_edit(request):
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, request.FILES, instance=request.user)  # thêm request.FILES
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            avatarFile = request.FILES.get('upload_avatar')
+            avatarBytes = avatarFile.read()
+            if avatarFile:
+                ext = os.path.splitext(avatarFile.name)[1]
+                fileName = f"{request.user.username}{ext}"
+                print(avatarFile)
+                try:
+                    avatarUrl = upload_to_supabase(avatarBytes, path_in_bucket=fileName, bucket_name="avatar")
+                    user.avatar = avatarUrl
+                except Exception as e:
+                    messages.error(request, f"Lỗi upload ảnh đại diện {e}")
+                    return redirect('users:profile_edit')
+            user.save()
             messages.success(request, "Cập nhật tài khoản thành công!")
             return redirect('users:profile')
+        else:
+            print("Form errors:", form.errors)
     else:
         form = UserUpdateForm(instance=request.user)
 
@@ -178,7 +195,7 @@ def profile_edit(request):
     return render(request, 'profile_edit.html', {
         'form': form,
         'cinemas': cinemas,
-        'avatar': request.user.avatar.url if request.user.avatar else None, 
+        'avatar': request.user.avatar if request.user.avatar else None, 
     })
 @login_required
 def password_change(request):

@@ -20,7 +20,7 @@
       </a>
       {% endif %}
       {% if user.is_authenticated %}
-      <img src="{{ user.avatar.url }}" alt="Avatar">
+      <img src="{{ user.avatar }}" alt="Avatar">
       {% else %}
       <img src="{% static 'images/User.png' %}" alt="Avatar">
       {% endif %}
@@ -34,6 +34,7 @@
     </div>
 
     <div class="navbar">
+<<<<<<< HEAD
     <a href="{% url 'home' %}" class="logo">
       <img class="logo-img" src="{% static 'images/logo.png' %}" alt="Rạp Việt Nam Logo">
     </a>
@@ -49,6 +50,22 @@
     </nav>
     </div>
 
+=======
+      <a href="{% url 'home' %}" class="logo">
+        <img src="{% static 'images/logo.png' %}" alt="Rạp Việt Nam Logo">
+      </a>
+      <nav>
+        <a href="{% url 'movies:movie_list' %}">Phim</a>
+        <a href="{% url 'movies:cinema_list' %}">Rạp Phim</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'users:profile' %}">Thành viên</a>
+        {% endif %}
+        {% if user.is_authenticated and user.is_staff %}
+          <a href="{% url 'admin:index' %}">Quản trị</a>
+        {% endif %}
+        </nav>
+      </div>
+>>>>>>> 43e2fc96b1adde0c6f72c259b6cd93a317392f21
     </header>
 
     <!-- Nội dung -->

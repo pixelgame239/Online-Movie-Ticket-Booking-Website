@@ -18,9 +18,8 @@ class User(AbstractUser):
         null=True,
         blank=True
     )
-    avatar = models.ImageField(
-        upload_to='avatars/',
-        default='avatars/default.png',   # ảnh mặc định
+    avatar = models.URLField(
+        default='https://anxkatxbafgpahipxzsw.supabase.co/storage/v1/object/public/avatar/default.png',   # ảnh mặc định
         blank=True,
         null=True
     )
