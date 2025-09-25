@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- SECURITY ---
 SECRET_KEY = 'django-insecure-3f31*p3*f=_il7d(t&25-9t4qfy21o5_)31&fvhq**7lr4o1-d'
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ["online-movie-ticket-booking-website.onrender.com", 'localhost', '127.0.0.1', "https://online-movie-ticket-booking-website-production.up.railway.app", "https://anmoviesweb.pythonanywhere.com","*"]
 
 # --- INSTALLED APPS ---
@@ -33,6 +33,7 @@ AUTH_USER_MODEL = 'users.User'
 
 # --- MIDDLEWARE ---
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
