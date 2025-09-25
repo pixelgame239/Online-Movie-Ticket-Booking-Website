@@ -10,6 +10,7 @@
     max-width: 1200px;
     margin: 40px auto;
     gap: 40px;
+    align-items: stretch;
   }
 
   /* Sidebar */
@@ -21,13 +22,16 @@
   }
 
   .profile-sidebar button {
-    background: #E5E5E5;
-    border: none;
-    padding: 12px;
-    font-size: 16px;
-    text-align: left;
-    cursor: pointer;
-  }
+  background: #E5E5E5;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;        /* ✅ make all buttons equal width */
+  box-sizing: border-box;
+}
+
 
   .profile-sidebar .active {
     background: #E52025;
@@ -106,10 +110,6 @@
     <a href="{% url 'users:profile_edit' %}"><button>CHI TIẾT TÀI KHOẢN</button></a>
     <a href="{% url 'users:password_change' %}"><button >CÀI ĐẶT MẬT KHẨU</button></a>
     <button>THẺ THÀNH VIÊN</button>
-    <button>ĐIỂM THƯỞNG</button>
-    <button>THẺ QUÀ TẶNG</button>
-    <button>VOUCHER</button>
-    <button>COUPON</button>
     <button>LỊCH SỬ GIAO DỊCH</button>
   </div>
 
