@@ -12,7 +12,7 @@ class SeatAdmin(admin.ModelAdmin):
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ('id', 'customer', 'showtime', 'status', 'booking_date', 'quantity', 'total_price', 'payment_method', 'customer_name', 'customer_phone')
+    list_display = ('id', 'customer', 'showtime', 'status', 'booking_date', 'seats_booked', 'total_price', 'payment_method', 'customer_name', 'customer_phone')
     list_filter = ('status', 'showtime__movie', 'showtime__cinema')
     search_fields = ('customer__username', 'showtime__movie__title', 'showtime__cinema__name')
     date_hierarchy = 'booking_date'
