@@ -86,17 +86,23 @@ def register(request):
 
 def user_login(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        if(username.lower().strip()=="guest"):
-            messages.error(request, "Invalid username or password")
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
+
+        # Kiểm tra username "guest" (cấm đăng nhập)
+        if username.lower() == "guest":
+            messages.error(request, "Tên đăng nhập hoặc mật khẩu không hợp lệ")
             return render(request, 'login.html')
+
+        # Xác thực user
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')
+            messages.success(request, f"Chào mừng {user.username}!")
+            return redirect('home')  # Hoặc URL trang chủ
         else:
             messages.error(request, "Sai tên đăng nhập hoặc mật khẩu")
+
     return render(request, 'login.html')
 def send_password_reset_email(user, request):
     subject = 'Khôi phục mật khẩu của bạn'
