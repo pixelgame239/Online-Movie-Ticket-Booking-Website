@@ -59,7 +59,16 @@ body {
   border-top: 4px solid #e52025;
   border-bottom: 4px solid #e52025;
 }
-
+.navbar .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #f0a748;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
 .navbar .logo-img {
   height: 50px;
   /* adjust to your logo */
