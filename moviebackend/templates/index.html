@@ -26,7 +26,6 @@
   <section class="movies" style="margin-bottom:60px;">
     <h2 style="font-size:28px; font-weight:700; color:#E52025; margin-bottom:25px; text-align:center;">🎬 PHIM ĐANG VÀ SẮP CHIẾU</h2>
     <div class="carousel" style="display:flex; align-items:center; gap:15px;">
-      <button class="prev">&#10094;</button>
       <div class="movie-list" style="display:flex; gap:20px; overflow-x:auto; scroll-behavior:smooth;">
         {% for movie in movies_now_showing %}
           <div class="movie-card" style="min-width:220px; border:1px solid #ddd; border-radius:10px; overflow:hidden; background:#fff; box-shadow:0 3px 6px rgba(0,0,0,0.1); position:relative;">
@@ -48,7 +47,6 @@
           <p>Chưa có phim nào đang và sắp chiếu.</p>
         {% endfor %}
       </div>
-      <button class="next">&#10095;</button>
     </div>
   </section>
 
@@ -56,7 +54,6 @@
   <section class="movies">
     <h2 style="font-size:28px; font-weight:700; color:#E52025; margin-bottom:25px; text-align:center;">🔥 PHIM HOT</h2>
     <div class="carousel" style="display:flex; align-items:center; gap:15px;">
-      <button class="prev">&#10094;</button>
       <div class="movie-list" style="display:flex; gap:20px; overflow-x:auto; scroll-behavior:smooth;">
         {% for movie in movies_hot %}
           <div class="movie-card" style="min-width:220px; border:1px solid #ddd; border-radius:10px; overflow:hidden; background:#fff; box-shadow:0 3px 6px rgba(0,0,0,0.1); position:relative;">
@@ -80,7 +77,6 @@
           <p>Chưa có phim hot nào.</p>
         {% endfor %}
       </div>
-      <button class="next">&#10095;</button>
     </div>
   </section>
 {% endblock %}

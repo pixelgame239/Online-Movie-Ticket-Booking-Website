@@ -44,33 +44,58 @@ def movie_list(request):
 def movie_detail(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
     now = timezone.now()
-    showtimes = Showtime.objects.filter(movie=movie, show_time__gte=now).order_by("show_time")
-    has_future_showtime = showtimes.exists()  
+
+    # Suất chiếu tương lai
+    future_showtimes = Showtime.objects.filter(
+        movie=movie, show_time__gte=now
+    ).select_related("cinema").order_by("show_time")
+
+    # Phim cùng thể loại
+    related_movies = Movie.objects.filter(
+        genre=movie.genre
+    ).exclude(id=movie.id)[:5]  
+
     return render(request, "movie_detail.html", {
         "movie": movie,
-        "showtimes": showtimes,
-        "has_future_showtime": has_future_showtime,
+        "future_showtimes": future_showtimes,
+        "has_future_showtime": future_showtimes.exists(),
+        "related_movies": related_movies,
     })
-
 
 def cinema_list(request):
     cinemas = Cinema.objects.prefetch_related('showtimes__movie')
+    today = timezone.localdate()
+    now = timezone.now()
 
     for cinema in cinemas:
-        # Danh sách phim chiếu ở rạp
+        # Danh sách phim trong rạp
         cinema.movie_titles = list({s.movie.title for s in cinema.showtimes.all()})
 
-        # Các ngày có lịch chiếu
-        cinema.show_dates = sorted({s.show_time.date() for s in cinema.showtimes.all()})
+        # Chỉ lấy ngày chiếu từ hôm nay trở đi
+        cinema.show_dates = sorted({
+            s.show_time.date() for s in cinema.showtimes.all()
+            if s.show_time.date() >= today
+        })
 
-        # Gom showtimes theo ngày
+        # Gom suất chiếu theo ngày (chỉ lấy suất >= now nếu cùng ngày)
         cinema.showtimes_by_date = {}
         for date in cinema.show_dates:
             cinema.showtimes_by_date[date] = [
-                s for s in cinema.showtimes.all() if s.show_time.date() == date
+                s for s in cinema.showtimes.all()
+                if s.show_time.date() == date and (
+                    date > today or s.show_time >= now
+                )
             ]
 
-    return render(request, "cinema_list.html", {"cinemas": cinemas})
+    return render(
+        request,
+        "cinema_list.html",
+        {
+            "cinemas": cinemas,
+            "today": today,
+            "now": now,
+        }
+    )
 
 
 def cinema_detail(request, pk):

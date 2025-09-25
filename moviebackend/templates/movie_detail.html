@@ -1,76 +1,102 @@
 {% extends "base.html" %}
 {% load static %}
-{% load tz %}  {# để dùng now #}
+{% load tz %}
 
 {% block title %}{{ movie.title }} - Rạp Việt Nam{% endblock %}
 
 {% block content %}
-<div class="container" style="margin:40px auto; max-width:1000px;">
+<div class="container" style="margin:40px auto; max-width:1200px;">
 
   <h2 style="margin-bottom:20px;">Nội Dung Phim</h2>
   <hr>
 
   <div style="display:flex; gap:30px; align-items:flex-start;">
-    <!-- Poster -->
-    <div style="flex:0 0 250px; text-align:center;">
-      {% if movie.poster %}
-        <img src="{{ movie.poster }}" alt="{{ movie.title }}" style="width:100%; max-width:250px; border:1px solid #ccc; padding:4px;">
-      {% else %}
-        <img src="{% static 'images/placeholder_movie.png' %}" alt="No Poster" style="width:100%; max-width:250px; border:1px solid #ccc; padding:4px;">
-      {% endif %}
-      <br><br>
-      {% now "Y-m-d" as today %}
-      {% if movie.release_date and movie.end_date %}
-        {% if movie.release_date|stringformat:"s" <= today and today <= movie.end_date|stringformat:"s" %}
-          <a href="#" class="btn-buy">MUA VÉ</a>
+    <!-- Cột trái: Thông tin phim -->
+    <div style="flex:3;">
+      <div style="display:flex; gap:30px; align-items:flex-start;">
+        <!-- Poster -->
+        <div style="flex:0 0 250px; text-align:center;">
+          {% if movie.poster %}
+            <img src="{{ movie.poster }}" alt="{{ movie.title }}" style="width:100%; max-width:250px; border:1px solid #ccc; padding:4px;">
+          {% else %}
+            <img src="{% static 'images/placeholder_movie.png' %}" alt="No Poster" style="width:100%; max-width:250px; border:1px solid #ccc; padding:4px;">
+          {% endif %}
+        </div>
+
+        <!-- Thông tin phim -->
+        <div style="flex:1;">
+          <h3>{{ movie.title }}</h3>
+          <table style="width:100%; border-collapse:collapse; margin:15px 0;">
+            <tr>
+              <td style="font-weight:bold;">Thể loại:</td>
+              <td>{{ movie.genre.genre_name }}</td>
+            </tr>
+            <tr>
+              <td style="font-weight:bold;">Khởi chiếu:</td>
+              <td>{{ movie.release_date|date:"d/m/Y" }}</td>
+            </tr>
+            <tr>
+              <td style="font-weight:bold;">Thời lượng:</td>
+              <td>{{ movie.duration }} phút</td>
+            </tr>
+
+            <tr>
+              <td style="font-weight:bold;">Rated:</td>
+              <td><span class="rating-badge">{{ movie.rating|default:"T13" }}</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Lịch chiếu -->
+      <div id="lich-chieu" style="margin-top:40px;">
+        <h3>Lịch chiếu</h3>
+        {% if has_future_showtime %}
+          <ul style="list-style:none; padding:0;">
+            {% for s in future_showtimes %}
+              <li style="margin-bottom:10px;">
+                <strong>{{ s.cinema.name }}</strong> - {{ s.show_time|date:"d/m/Y H:i" }}
+                <a href="{% url 'bookings:select_seats' s.id %}" class="btn-buy" style="margin-left:10px; padding:6px 12px;">MUA VÉ</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p style="font-style:italic; color:gray;">Hiện chưa có lịch chiếu cho phim này.</p>
         {% endif %}
+      </div>
+
+      <!-- Mô tả -->
+      <div style="margin-top:30px; text-align:center;">
+        <a href="#" class="btn-detail">Chi tiết phim</a>
+        <p style="margin-top:20px; line-height:1.6; text-align:justify;">
+          {{ movie.description|default:"Hiện chưa có mô tả cho phim này." }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Cột phải: Phim cùng thể loại -->
+    <div style="flex:1; border-left:1px solid #ddd; padding-left:20px;">
+      <h4 style="margin-bottom:15px;">🎬 Phim cùng thể loại</h4>
+      {% if related_movies %}
+        <ul style="list-style:none; padding:0; margin:0;">
+          {% for rm in related_movies %}
+            <li style="margin-bottom:15px;">
+              <a href="{% url 'movies:movie_detail' rm.id %}" style="text-decoration:none; color:#000; display:flex; gap:10px; align-items:center;">
+                {% if rm.poster %}
+                  <img src="{{ rm.poster }}" alt="{{ rm.title }}" style="width:60px; height:90px; object-fit:cover; border:1px solid #ccc;">
+                {% else %}
+                  <img src="{% static 'images/placeholder_movie.png' %}" alt="No Poster" style="width:60px; height:90px; object-fit:cover; border:1px solid #ccc;">
+                {% endif %}
+                <span>{{ rm.title }}</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Chưa có phim nào cùng thể loại.</p>
       {% endif %}
     </div>
-
-    <!-- Thông tin phim -->
-    <div style="flex:1;">
-      <h3>{{ movie.title }}</h3>
-      <table style="width:100%; border-collapse:collapse; margin:15px 0;">
-        <tr>
-          <td style="width:150px; font-weight:bold;">Đạo diễn:</td>
-          <td>{{ movie.director|default:"Đang cập nhật" }}</td>
-        </tr>
-        <tr>
-          <td style="font-weight:bold;">Diễn viên:</td>
-          <td>{{ movie.cast|default:"Đang cập nhật" }}</td>
-        </tr>
-        <tr>
-          <td style="font-weight:bold;">Thể loại:</td>
-          <td>{{ movie.genre.genre_name }}</td>
-        </tr>
-        <tr>
-          <td style="font-weight:bold;">Khởi chiếu:</td>
-          <td>{{ movie.release_date|date:"d/m/Y" }}</td>
-        </tr>
-        <tr>
-          <td style="font-weight:bold;">Thời lượng:</td>
-          <td>{{ movie.duration }} phút</td>
-        </tr>
-        <tr>
-          <td style="font-weight:bold;">Ngôn ngữ:</td>
-          <td>{{ movie.language|default:"Đang cập nhật" }}</td>
-        </tr>
-        <tr>
-          <td style="font-weight:bold;">Rated:</td>
-          <td><span class="rating-badge">{{ movie.rating|default:"T13" }}</span></td>
-        </tr>
-      </table>
-    </div>
   </div>
-
-  <!-- Nút chi tiết + mô tả -->
-  <div style="margin-top:30px; text-align:center;">
-    <a href="#" class="btn-detail">Chi tiết phim</a>
-    <p style="margin-top:20px; line-height:1.6; text-align:justify;">
-      {{ movie.description|default:"Hiện chưa có mô tả cho phim này." }}
-    </p>
-  </div>
-
 </div>
 
 <style>
