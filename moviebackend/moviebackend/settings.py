@@ -16,6 +16,7 @@ ALLOWED_HOSTS = ["online-movie-ticket-booking-website.onrender.com", 'localhost'
 CSRF_TRUSTED_ORIGINS = [
     # Existing origins (if any)
     "https://online-movie-ticket-booking-website-production.up.railway.app",
+    "https://online-movie-ticket-booking-website.onrender.com",
 ]
 # --- INSTALLED APPS ---
 INSTALLED_APPS = [
