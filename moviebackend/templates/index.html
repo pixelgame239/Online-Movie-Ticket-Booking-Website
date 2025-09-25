@@ -7,7 +7,11 @@
   <div class="slider" style="position:relative; width:100%; max-height:500px; overflow:hidden; margin-bottom:50px;">
     {% for slide in slides %}
       <div class="slide {% if forloop.first %}active{% endif %}" style="display:none;">
-        <img src="{{ slide.image.url }}" alt="{{ slide.title }}" style="width:100%; height:500px; object-fit:cover;">
+        {% if slide.image %}
+          <img src="{{ slide.image }}" alt="{{ slide.title }}" style="width:100%; height:500px; object-fit:cover;">
+        {% else %}
+          <img src="{% static 'images/default_banner.png' %}" alt="Banner mặc định" style="width:100%; height:500px; object-fit:cover;">
+        {% endif %}
       </div>
     {% empty %}
       <div class="slide active">
@@ -25,12 +29,12 @@
       <button class="prev">&#10094;</button>
       <div class="movie-list" style="display:flex; gap:20px; overflow-x:auto; scroll-behavior:smooth;">
         {% for movie in movies_now_showing %}
-          <div class="movie-card" style="min-width:220px; border:1px solid #ddd; border-radius:10px; overflow:hidden; background:#fff; box-shadow:0 3px 6px rgba(0,0,0,0.1);">
+          <div class="movie-card" style="min-width:220px; border:1px solid #ddd; border-radius:10px; overflow:hidden; background:#fff; box-shadow:0 3px 6px rgba(0,0,0,0.1); position:relative;">
             <span class="tag" style="position:absolute; background:#E52025; color:#fff; padding:5px 10px; font-size:14px; font-weight:600; border-radius:0 0 6px 0;">
               {{ movie.rating }}
             </span>
             {% if movie.poster %}
-              <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" style="width:100%; height:320px; object-fit:cover;">
+              <img src="{{ movie.poster }}" alt="{{ movie.title }}" style="width:100%; height:320px; object-fit:cover;">
             {% else %}
               <div style="width:100%; height:320px; background:#eee; display:flex; align-items:center; justify-content:center;">No Poster</div>
             {% endif %}
@@ -55,12 +59,12 @@
       <button class="prev">&#10094;</button>
       <div class="movie-list" style="display:flex; gap:20px; overflow-x:auto; scroll-behavior:smooth;">
         {% for movie in movies_hot %}
-          <div class="movie-card" style="min-width:220px; border:1px solid #ddd; border-radius:10px; overflow:hidden; background:#fff; box-shadow:0 3px 6px rgba(0,0,0,0.1);">
+          <div class="movie-card" style="min-width:220px; border:1px solid #ddd; border-radius:10px; overflow:hidden; background:#fff; box-shadow:0 3px 6px rgba(0,0,0,0.1); position:relative;">
             <span class="tag" style="position:absolute; background:#E52025; color:#fff; padding:5px 10px; font-size:14px; font-weight:600; border-radius:0 0 6px 0;">
               {{ movie.rating }}
             </span>
             {% if movie.poster %}
-              <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" style="width:100%; height:320px; object-fit:cover;">
+              <img src="{{ movie.poster }}" alt="{{ movie.title }}" style="width:100%; height:320px; object-fit:cover;">
             {% else %}
               <div style="width:100%; height:320px; background:#eee; display:flex; align-items:center; justify-content:center;">No Poster</div>
             {% endif %}

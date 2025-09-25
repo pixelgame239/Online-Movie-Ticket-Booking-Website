@@ -54,7 +54,7 @@
           <div class="poster">
             <a href="{% url 'movies:movie_detail' s.movie.id %}">
               {% if s.movie.poster %}
-                <img src="{{ s.movie.poster.url }}" alt="{{ s.movie.title }}">
+                <img src="{{ s.movie.poster }}" alt="{{ s.movie.title }}">
               {% else %}
                 <img src="{% static 'images/placeholder_movie.png' %}" alt="{{ s.movie.title }}">
               {% endif %}

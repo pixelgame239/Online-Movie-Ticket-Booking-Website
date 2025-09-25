@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tz %}  {# để dùng now #}
+
+{% block title %}{{ movie.title }} - Rạp Việt Nam{% endblock %}
+
+{% block content %}
+<div class="container" style="margin:40px auto; max-width:1000px;">
+
+  <h2 style="margin-bottom:20px;">Nội Dung Phim</h2>
+  <hr>
+
+  <div style="display:flex; gap:30px; align-items:flex-start;">
+    <!-- Poster -->
+    <div style="flex:0 0 250px; text-align:center;">
+      {% if movie.poster %}
+        <img src="{{ movie.poster }}" alt="{{ movie.title }}" style="width:100%; max-width:250px; border:1px solid #ccc; padding:4px;">
+      {% else %}
+        <img src="{% static 'images/placeholder_movie.png' %}" alt="No Poster" style="width:100%; max-width:250px; border:1px solid #ccc; padding:4px;">
+      {% endif %}
+      <br><br>
+      {% now "Y-m-d" as today %}
+      {% if movie.release_date and movie.end_date %}
+        {% if movie.release_date|stringformat:"s" <= today and today <= movie.end_date|stringformat:"s" %}
+          <a href="#" class="btn-buy">MUA VÉ</a>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <!-- Thông tin phim -->
+    <div style="flex:1;">
+      <h3>{{ movie.title }}</h3>
+      <table style="width:100%; border-collapse:collapse; margin:15px 0;">
+        <tr>
+          <td style="width:150px; font-weight:bold;">Đạo diễn:</td>
+          <td>{{ movie.director|default:"Đang cập nhật" }}</td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold;">Diễn viên:</td>
+          <td>{{ movie.cast|default:"Đang cập nhật" }}</td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold;">Thể loại:</td>
+          <td>{{ movie.genre.genre_name }}</td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold;">Khởi chiếu:</td>
+          <td>{{ movie.release_date|date:"d/m/Y" }}</td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold;">Thời lượng:</td>
+          <td>{{ movie.duration }} phút</td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold;">Ngôn ngữ:</td>
+          <td>{{ movie.language|default:"Đang cập nhật" }}</td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold;">Rated:</td>
+          <td><span class="rating-badge">{{ movie.rating|default:"T13" }}</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Nút chi tiết + mô tả -->
+  <div style="margin-top:30px; text-align:center;">
+    <a href="#" class="btn-detail">Chi tiết phim</a>
+    <p style="margin-top:20px; line-height:1.6; text-align:justify;">
+      {{ movie.description|default:"Hiện chưa có mô tả cho phim này." }}
+    </p>
+  </div>
+
+</div>
+
+<style>
+.btn-buy {
+  display:inline-block;
+  background:#e50914;
+  color:white;
+  padding:10px 25px;
+  border-radius:4px;
+  font-weight:bold;
+  text-decoration:none;
+}
+.btn-buy:hover { background:#b20710; }
+
+.btn-detail {
+  display:inline-block;
+  background:#e50914;
+  color:white;
+  padding:10px 25px;
+  border-radius:4px;
+  font-weight:bold;
+  text-decoration:none;
+}
+.btn-detail:hover { background:#b20710; }
+
+.rating-badge {
+  display:inline-block;
+  padding:4px 10px;
+  background:#d9f97d;
+  border-radius:4px;
+  font-weight:bold;
+}
+</style>
+{% endblock %}
