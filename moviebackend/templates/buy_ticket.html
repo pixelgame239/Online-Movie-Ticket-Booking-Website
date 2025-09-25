@@ -44,7 +44,7 @@
             <br>
             <strong>Rạp:</strong> {{ showtime.cinema.name }}
             <br>
-            <a href="#"
+            <a href="{% url 'bookings:select_seats' showtime.id %}"
                style="margin-top: 8px; display: inline-block; padding: 8px 12px; background-color: #E52025; color: white; text-decoration: none; border-radius: 5px;">
               Chọn ghế & Đặt vé
             </a>

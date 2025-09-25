@@ -38,7 +38,7 @@ class Booking(models.Model):
     total_price = models.DecimalField(max_digits=7, decimal_places=0)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     booking_date = models.DateTimeField(auto_now_add=True)
-    quantity= models.PositiveIntegerField(help_text="Ticket quantity", default=1)
+    seats_booked= models.JSONField(help_text="Ticket quantity", default=list)
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHODS, default='banking')
     customer_name = models.CharField(max_length=100, null=False, blank=False, default="Guest")
     customer_phone = models.CharField(max_length=10, null=False, blank=False, default='09')

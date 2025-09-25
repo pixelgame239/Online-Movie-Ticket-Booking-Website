@@ -50,7 +50,7 @@ class UserUpdateForm(UserChangeForm):
         required=False,
         label="Rạp yêu thích"
     )
-    avatar = forms.ImageField(required=False, label="Ảnh đại diện")
+    upload_avatar = forms.ImageField(required=False, label="Ảnh đại diện")
     class Meta:
         model = User
         fields = [
