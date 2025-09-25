@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load tz %}
 
 {% block title %}Danh sách rạp chiếu - Rạp Việt Nam{% endblock %}
 {% block extra_css %}
@@ -38,51 +39,57 @@
         <button class="arrow">&lt;</button>
         <div class="dates">
           {% for date in cinema.show_dates %}
-            <div class="date-item {% if forloop.first %}active{% endif %}" data-cinema="{{ cinema.id }}" data-date="{{ date }}">
-              <span>{{ date.day }}</span><br>
-              <small>Th{{ date.month }}</small>
-            </div>
+            {% if date >= today %}
+              <div class="date-item {% if forloop.first %}active{% endif %}" data-cinema="{{ cinema.id }}" data-date="{{ date }}">
+                <span>{{ date.day }}</span><br>
+                <small>Th{{ date.month }}</small>
+              </div>
+            {% endif %}
           {% endfor %}
         </div>
         <button class="arrow">&gt;</button>
       </div>
       <!-- Danh sách phim theo ngày -->
       {% for date, showtimes in cinema.showtimes_by_date.items %}
-      <div class="movie-list movie-list-date" data-date="{{ date }}" {% if not forloop.first %}style="display:none"{% endif %}>
-        {% for s in showtimes %}
-        <div class="movie-block">
-          <div class="poster">
-            <a href="{% url 'movies:movie_detail' s.movie.id %}">
-              {% if s.movie.poster %}
-                <img src="{{ s.movie.poster.url }}" alt="{{ s.movie.title }}">
-              {% else %}
-                <img src="{% static 'images/placeholder_movie.png' %}" alt="{{ s.movie.title }}">
-              {% endif %}
-            </a>
-          </div>
-          <div class="movie-detail">
-            <h5 class="movie-title">
-              <a href="{% url 'movies:movie_detail' s.movie.id %}">{{ s.movie.title }}</a>
-            </h5>
-            <p><strong>Thể loại:</strong> {{ s.movie.genre.genre_name }}</p>
-            <p><strong>Thời lượng:</strong> {{ s.movie.duration }} phút</p>
-            <p><strong>Giá vé:</strong> {{ s.movie.ticket_price|floatformat:0 }} VNĐ</p>
-            <p><strong>Vé đã bán:</strong> {{ s.movie.buy_count }}</p>
-            {% if s.movie.description %}
-            <p><strong>Mô tả:</strong> {{ s.movie.description|truncatewords:25 }}</p>
-            {% endif %}
-            <div class="showtimes">
-              <strong>Giờ chiếu:</strong>
-              {% for st in showtimes %}
-                {% if st.movie.id == s.movie.id %}
-                  <button>{{ st.show_time|time:"H:i" }}</button>
+        {% if date >= today %}
+        <div class="movie-list movie-list-date" data-date="{{ date }}" {% if not forloop.first %}style="display:none"{% endif %}>
+          {% for s in showtimes %}
+          <div class="movie-block">
+            <div class="poster">
+              <a href="{% url 'movies:movie_detail' s.movie.id %}">
+                {% if s.movie.poster %}
+                  <img src="{{ s.movie.poster }}" alt="{{ s.movie.title }}">
+                {% else %}
+                  <img src="{% static 'images/placeholder_movie.png' %}" alt="{{ s.movie.title }}">
                 {% endif %}
-              {% endfor %}
+              </a>
+            </div>
+            <div class="movie-detail">
+              <h5 class="movie-title">
+                <a href="{% url 'movies:movie_detail' s.movie.id %}">{{ s.movie.title }}</a>
+              </h5>
+              <p><strong>Thể loại:</strong> {{ s.movie.genre.genre_name }}</p>
+              <p><strong>Thời lượng:</strong> {{ s.movie.duration }} phút</p>
+              <p><strong>Giá vé:</strong> {{ s.movie.ticket_price|floatformat:0 }} VNĐ</p>
+              <p><strong>Vé đã bán:</strong> {{ s.movie.buy_count }}</p>
+              {% if s.movie.description %}
+              <p><strong>Mô tả:</strong> {{ s.movie.description|truncatewords:25 }}</p>
+              {% endif %}
+              <div class="showtimes">
+                <strong>Giờ chiếu:</strong>
+                {% for st in showtimes %}
+                  {% if st.movie.id == s.movie.id and st.show_time >= now %}
+                    <a href="{% url 'bookings:select_seats' st.id %}" class="btn-buy">
+                      {{ st.show_time|time:"H:i" }} - Mua vé
+                    </a>
+                  {% endif %}
+                {% endfor %}
+              </div>
             </div>
           </div>
+          {% endfor %}
         </div>
-        {% endfor %}
-      </div>
+        {% endif %}
       {% endfor %}
 
     </div>
@@ -136,5 +143,16 @@ document.addEventListener("DOMContentLoaded", function () {
 .cinema-content.active { display: block; }
 .date-item.active { background: red; color: white; }
 .movie-list-date { margin-bottom: 20px; }
+.btn-buy {
+  display:inline-block;
+  background:#e50914;
+  color:white;
+  padding:6px 12px;
+  border-radius:4px;
+  font-weight:bold;
+  text-decoration:none;
+  margin:2px;
+}
+.btn-buy:hover { background:#b20710; }
 </style>
 {% endblock %}

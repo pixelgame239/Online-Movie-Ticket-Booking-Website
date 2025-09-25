@@ -8,7 +8,7 @@ from users.models import User
 
 def select_seats(request, showtime_id):
     showtime = get_object_or_404(Showtime, id=showtime_id)
-    seat_numbers = list(range(1,43))
+    seat_numbers = list(range(1, 43))
     booked_seats = Seat.objects.filter(showtime=showtime)
     booked_seat_numbers = [int(seat.seat_number) for seat in booked_seats]
     customer_name = request.user.username if request.user.is_authenticated else 'Guest'
@@ -21,7 +21,7 @@ def select_seats(request, showtime_id):
         print(selected_seats)
         customer_user = request.user if request.user.is_authenticated else User.objects.get(id=2)
         if not selected_seats:
-            messages.error(request, "You must select at least one seat.")
+            messages.error(request, "Bạn phải chọn ít nhất 1 ghế.")
             return redirect('bookings:select_seats', showtime_id=showtime.id)
         booking = Booking.objects.create(
             customer=customer_user,
@@ -33,6 +33,8 @@ def select_seats(request, showtime_id):
             seats_booked=selected_seats,
             payment_method=payment_method
         )
+
+        # Đánh dấu ghế
         for seatBooked in selected_seats:
             seat = Seat.objects.create(showtime=showtime, seat_number=int(seatBooked))
             seat.is_booked = True
@@ -55,16 +57,15 @@ def payment(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id, customer=request.user)
     if request.method == 'POST':
         method = request.POST.get('method')
-        Booking.objects.create(
-            booking=booking,
-            method=method,
-            amount=booking.total_price,
-            status='success'
-        )
+        booking.payment_method = method
+        booking.status = 'confirmed'
+        booking.save()
+
         messages.success(request, "Payment successful!")
         return redirect('bookings:booking_history')
 
     return render(request, 'payment.html', {'booking': booking})
+
 
 
 @login_required
@@ -81,15 +82,14 @@ def cancel_booking(request, booking_id):
         booking.status = 'cancelled'
         booking.save()
 
-        # Giải phóng ghế từ ticket
-        for ticket in booking.tickets.all():
-            seat = ticket.seat
+        # Giải phóng ghế
+        for seat in Seat.objects.filter(showtime=booking.showtime, is_booked=True):
             seat.is_booked = False
             seat.save()
 
-        messages.success(request, "Booking cancelled successfully")
+        messages.success(request, "Hủy vé thành công.")
     else:
-        messages.error(request, "Cannot cancel past showtime")
+        messages.error(request, "Không thể hủy suất chiếu đã qua.")
 
     return redirect('bookings:booking_history')
 def my_tickets_view(request):
@@ -103,14 +103,12 @@ def buy_ticket(request, movie_id):
     movie = get_object_or_404(Movie, id=movie_id)
     current_time = timezone.now()
 
-    # Get all cinemas with upcoming showtimes for this movie
     cinema_ids = Showtime.objects.filter(
         movie=movie,
         show_time__gte=current_time
     ).values_list('cinema_id', flat=True).distinct()
     cinemas = Cinema.objects.filter(id__in=cinema_ids)
 
-    # Optional: filter showtimes by selected cinema
     selected_cinema_id = request.GET.get('cinema')
     showtimes = Showtime.objects.filter(
         movie=movie,
@@ -127,4 +125,3 @@ def buy_ticket(request, movie_id):
         'showtimes': showtimes,
         'selected_cinema_id': int(selected_cinema_id) if selected_cinema_id else None
     })
-

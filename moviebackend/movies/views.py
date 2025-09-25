@@ -1,17 +1,27 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from .models import Movie, Cinema, Showtime, Genre
-from .forms import MovieForm, ShowtimeForm
-def admin_required(user):
-    return user.is_staff
+
+
 def home(request):
-    currentDate = timezone.now()
-    showTimesUpNext = Showtime.objects.filter(show_time__gte=currentDate)
-    movie_id_up_next = list(showTimesUpNext.values_list('movie_id', flat=True))
-    movies_now_showing = Movie.objects.filter(id__in=showTimesUpNext.values('movie_id')).distinct()
+    current_date = timezone.now()
+    showtimes_up_next = Showtime.objects.filter(show_time__gte=current_date)
+
+    # Lấy danh sách phim sắp chiếu
+    movies_now_showing = Movie.objects.filter(
+        id__in=showtimes_up_next.values('movie_id')
+    ).distinct()
+
+    # Top 3 phim hot theo số lượng vé đã bán
     movies_hot = Movie.objects.filter(buy_count__gt=0).order_by('-buy_count')[:3]
-    return render(request, 'index.html', {'movies_now_showing': movies_now_showing, "movies_hot": movies_hot, "movie_id_up_next":movie_id_up_next})
+
+    return render(request, 'index.html', {
+        'movies_now_showing': movies_now_showing,
+        'movies_hot': movies_hot,
+        'movie_id_up_next': list(showtimes_up_next.values_list('movie_id', flat=True))
+    })
+
+
 def movie_list(request):
     movies = Movie.objects.all()
     genres = Genre.objects.all()
@@ -22,7 +32,8 @@ def movie_list(request):
     if query:
         movies = movies.filter(title__icontains=query)
     if genre:
-        movies = movies.filter(genre=genre)
+        # lọc theo genre name (do Genre PK = genre_name)
+        movies = movies.filter(genre__genre_name=genre)
 
     return render(request, 'movie_list.html', {
         'movies': movies,
@@ -32,27 +43,60 @@ def movie_list(request):
 
 def movie_detail(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
-    showtimes = movie.showtimes.all()
-    return render(request, 'movie_detail.html', {
-        'movie': movie,
-        'showtimes': showtimes
+    now = timezone.now()
+
+    # Suất chiếu tương lai
+    future_showtimes = Showtime.objects.filter(
+        movie=movie, show_time__gte=now
+    ).select_related("cinema").order_by("show_time")
+
+    # Phim cùng thể loại
+    related_movies = Movie.objects.filter(
+        genre=movie.genre
+    ).exclude(id=movie.id)[:5]  
+
+    return render(request, "movie_detail.html", {
+        "movie": movie,
+        "future_showtimes": future_showtimes,
+        "has_future_showtime": future_showtimes.exists(),
+        "related_movies": related_movies,
     })
+
 def cinema_list(request):
     cinemas = Cinema.objects.prefetch_related('showtimes__movie')
+    today = timezone.localdate()
+    now = timezone.now()
 
     for cinema in cinemas:
-        # Lấy danh sách phim theo rạp
+        # Danh sách phim trong rạp
         cinema.movie_titles = list({s.movie.title for s in cinema.showtimes.all()})
-        
-        # Lấy danh sách ngày có showtime duy nhất
-        cinema.show_dates = sorted({s.show_time.date() for s in cinema.showtimes.all()})
-        
-        # Gom showtimes theo ngày
+
+        # Chỉ lấy ngày chiếu từ hôm nay trở đi
+        cinema.show_dates = sorted({
+            s.show_time.date() for s in cinema.showtimes.all()
+            if s.show_time.date() >= today
+        })
+
+        # Gom suất chiếu theo ngày (chỉ lấy suất >= now nếu cùng ngày)
         cinema.showtimes_by_date = {}
         for date in cinema.show_dates:
-            cinema.showtimes_by_date[date] = [s for s in cinema.showtimes.all() if s.show_time.date() == date]
+            cinema.showtimes_by_date[date] = [
+                s for s in cinema.showtimes.all()
+                if s.show_time.date() == date and (
+                    date > today or s.show_time >= now
+                )
+            ]
 
-    return render(request, "cinema_list.html", {"cinemas": cinemas})
+    return render(
+        request,
+        "cinema_list.html",
+        {
+            "cinemas": cinemas,
+            "today": today,
+            "now": now,
+        }
+    )
+
 
 def cinema_detail(request, pk):
     cinema = get_object_or_404(Cinema, pk=pk)
@@ -61,48 +105,3 @@ def cinema_detail(request, pk):
         'cinema': cinema,
         'showtimes': showtimes
     })
-
-
-@login_required
-@user_passes_test(admin_required)
-def movie_create(request):
-    if request.method == 'POST':
-        form = MovieForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('movie_list')
-    else:
-        form = MovieForm()
-    return render(request, 'movie_form.html', {'form': form})
-
-@login_required
-@user_passes_test(admin_required)
-def movie_update(request, pk):
-    movie = get_object_or_404(Movie, pk=pk)
-    if request.method == 'POST':
-        form = MovieForm(request.POST, request.FILES, instance=movie)
-        if form.is_valid():
-            form.save()
-            return redirect('movie_detail', pk=movie.pk)
-    else:
-        form = MovieForm(instance=movie)
-    return render(request, 'movie_form.html', {'form': form})
-
-@login_required
-@user_passes_test(admin_required)
-def movie_delete(request, pk):
-    movie = get_object_or_404(Movie, pk=pk)
-    movie.delete()
-    return redirect('movie_list')
-
-@login_required
-@user_passes_test(admin_required)
-def showtime_create(request):
-    if request.method == 'POST':
-        form = ShowtimeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('movie_list')
-    else:
-        form = ShowtimeForm()
-    return render(request, 'showtime_form.html', {'form': form})
