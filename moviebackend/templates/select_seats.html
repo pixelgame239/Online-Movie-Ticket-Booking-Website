@@ -110,6 +110,18 @@
       <div><span style="background:#f0ad4e"></span> Ghế bạn đang chọn</div>
     </div>
   </div>
+   <div>
+        <label for="customer_name">Name:</label>
+        <input type="text" id="customer_name" name="customer_name" value="{{ customer_name }}" required>
+    </div>
+    <div>
+        <label for="customer_email">Email:</label>
+        <input type="email" id="customer_email" name="customer_email" value="{{ customer_email }}" required>
+    </div>
+    <div>
+        <label for="customer_phone">Phone:</label>
+        <input type="tel" id="customer_phone" name="customer_phone" value="{{ customer_phone }}" required>
+    </div>
   <select name="payment_method">
     <option value="banking">Banking</option>
     <option value="momo">Momo</option>

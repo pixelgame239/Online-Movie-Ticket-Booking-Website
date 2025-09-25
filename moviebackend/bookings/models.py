@@ -42,6 +42,7 @@ class Booking(models.Model):
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHODS, default='banking')
     customer_name = models.CharField(max_length=100, null=False, blank=False, default="Guest")
     customer_phone = models.CharField(max_length=10, null=False, blank=False, default='09')
+    customer_email = models.CharField(max_length=200, null=False, blank=False, default="")
 
     class Meta:
         ordering = ['-booking_date']

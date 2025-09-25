@@ -1,0 +1,48 @@
+<p>Hi <strong>{{ booking.customer_name }}</strong>,</p>
+
+<p>Vé xem của bạn đã được xác nhận, với thông tin vé như sau:</p>
+
+<table style="border-collapse: collapse; width: 100%; border: 1px solid #ddd; text-align: left;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th style="padding: 8px; border: 1px solid #ddd;">Poster</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Tên phim</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Giờ chiếu</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Ghế đã đặt</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Thanh toán</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Tổng tiền</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;">
+                <img src="{{ booking.showtime.movie.poster }}" alt="Movie Poster" style="width: 100px; height: auto;">
+            </td>
+            <td style="padding: 8px; border: 1px solid #ddd;">
+                {{ booking.showtime.movie.title }}
+            </td>
+            <td style="padding: 8px; border: 1px solid #ddd;">
+                {{ booking.showtime.show_time|date:"H:i d/m/Y" }}
+            </td>
+            <td style="padding: 8px; border: 1px solid #ddd;">
+                {{ booking.seats_booked|join:", " }}
+            </td>
+            <td style="padding: 8px; border: 1px solid #ddd;">
+                {{ booking.payment_method|title }}
+            </td>
+            <td style="padding: 8px; border: 1px solid #ddd;">
+                {{ booking.total_price }} VND
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p style="text-align: center; margin: 20px 0;">
+    <a href="{{ my_tickets_url }}" 
+       style="background-color: #007BFF; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">
+       Xem chi tiết
+    </a>
+</p>
+
+<p style="font-style: italic;">Nếu có gì sai sót, hoặc có ý kiến gì về đơn hàng này, vui lòng gọi đến hotline của Rạp hoặc gửi email qua <a href="mailto:20221580@eaut.edu.vn">20221580@eaut.edu.vn</a> (Lee An) để được hỗ trợ.</p>
+
+<p>Cảm ơn quý khách,<br>Admin</p>

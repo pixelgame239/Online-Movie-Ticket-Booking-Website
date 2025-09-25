@@ -30,7 +30,7 @@
               {{ movie.rating }}
             </span>
             {% if movie.poster %}
-              <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" style="width:100%; height:320px; object-fit:cover;">
+              <img src="{{ movie.poster }}" alt="{{ movie.title }}" style="width:100%; height:320px; object-fit:cover;">
             {% else %}
               <div style="width:100%; height:320px; background:#eee; display:flex; align-items:center; justify-content:center;">No Poster</div>
             {% endif %}
@@ -60,7 +60,7 @@
               {{ movie.rating }}
             </span>
             {% if movie.poster %}
-              <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" style="width:100%; height:320px; object-fit:cover;">
+              <img src="{{ movie.poster }}" alt="{{ movie.title }}" style="width:100%; height:320px; object-fit:cover;">
             {% else %}
               <div style="width:100%; height:320px; background:#eee; display:flex; align-items:center; justify-content:center;">No Poster</div>
             {% endif %}

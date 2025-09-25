@@ -4,28 +4,32 @@ from django.contrib import messages
 from django.utils import timezone
 from movies.models import Showtime, Movie, Cinema
 from .models import Booking, Seat
+from users.models import User
 
-@login_required
 def select_seats(request, showtime_id):
     showtime = get_object_or_404(Showtime, id=showtime_id)
     seat_numbers = list(range(1,43))
     booked_seats = Seat.objects.filter(showtime=showtime)
     booked_seat_numbers = [int(seat.seat_number) for seat in booked_seats]
+    customer_name = request.user.username if request.user.is_authenticated else 'Guest'
+    customer_email = request.user.email if request.user.is_authenticated else ''
+    customer_phone = request.user.phone if request.user.is_authenticated else ''
     if request.method == 'POST':
         selected_seats = request.POST.getlist('seats')
         print(request.POST)
         payment_method  = request.POST['payment_method']
         print(selected_seats)
-        
+        customer_user = request.user if request.user.is_authenticated else User.objects.get(id=2)
         if not selected_seats:
             messages.error(request, "You must select at least one seat.")
             return redirect('bookings:select_seats', showtime_id=showtime.id)
-
         booking = Booking.objects.create(
-            customer=request.user,
+            customer=customer_user,
             showtime=showtime,
             total_price=len(selected_seats) * showtime.movie.ticket_price, 
-            customer_name= request.user.username if request.user else 'Guest',
+            customer_name= request.POST['customer_name'],
+            customer_email = request.POST['customer_email'],
+            customer_phone = request.POST['customer_phone'],
             seats_booked=selected_seats,
             payment_method=payment_method
         )
@@ -39,7 +43,10 @@ def select_seats(request, showtime_id):
     return render(request, 'select_seats.html', {
         'showtime': showtime,
         'seat_numbers': seat_numbers,
-        'booked_seat_numbers': booked_seat_numbers  # Pass booked seat numbers to the template
+        'booked_seat_numbers': booked_seat_numbers,  # Pass booked seat numbers to the template
+        'customer_name': customer_name,
+        'customer_email': customer_email,
+        'customer_phone': customer_phone,
     })
 
 
@@ -85,10 +92,12 @@ def cancel_booking(request, booking_id):
         messages.error(request, "Cannot cancel past showtime")
 
     return redirect('bookings:booking_history')
-@login_required
 def my_tickets_view(request):
-    bookings = Booking.objects.filter(customer=request.user)
-    return render(request, 'my_tickets.html', {'bookings': bookings})
+    if(request.user.is_authenticated):
+        bookings = Booking.objects.filter(customer=request.user)
+        return render(request, 'my_tickets.html', {'bookings': bookings})
+    else:
+        return render(request, 'login.html')
 
 def buy_ticket(request, movie_id):
     movie = get_object_or_404(Movie, id=movie_id)

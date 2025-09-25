@@ -19,32 +19,9 @@
         <p><strong>Tổng tiền:</strong> {{ booking.total_price }} VNĐ</p>
         <p><strong>Trạng thái:</strong> {{ booking.status }}</p>
 
-        <h4>Danh sách vé:</h4>
-        <table style="width:100%; border-collapse:collapse; font-size:18px;">
-          <thead>
-            <tr style="background:#f9f9f9;">
-              <th style="border:1px solid #ddd; padding:8px;">Mã vé</th>
-              <th style="border:1px solid #ddd; padding:8px;">Ghế</th>
-              <th style="border:1px solid #ddd; padding:8px;">Giá</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for ticket in booking.tickets.all %}
-              <tr>
-                <td style="border:1px solid #ddd; padding:8px; text-align:center;">
-                  {{ ticket.id }}
-                </td>
-                <td style="border:1px solid #ddd; padding:8px; text-align:center;">
-                  {{ ticket.seat.seat_number }}
-                </td>
-                <td style="border:1px solid #ddd; padding:8px; text-align:right;">
-                  {{ ticket.price }} VNĐ
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        <h4>Danh sách ghế đã đặt: {{ booking.seats_booked|join:", " }}</h4>
       </div>
+      
     {% endfor %}
   {% else %}
     <p style="text-align:center; font-size:20px; color:#666; margin:60px 0;">
