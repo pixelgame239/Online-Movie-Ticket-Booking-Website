@@ -50,47 +50,56 @@
         <button class="arrow">&gt;</button>
       </div>
       <!-- Danh sách phim theo ngày -->
+      {% with has_movies=False %}
       {% for date, showtimes in cinema.showtimes_by_date.items %}
         {% if date >= today %}
-        <div class="movie-list movie-list-date" data-date="{{ date }}" {% if not forloop.first %}style="display:none"{% endif %}>
-          {% for s in showtimes %}
-          <div class="movie-block">
-            <div class="poster">
-              <a href="{% url 'movies:movie_detail' s.movie.id %}">
-                {% if s.movie.poster %}
-                  <img src="{{ s.movie.poster }}" alt="{{ s.movie.title }}">
-                {% else %}
-                  <img src="{% static 'images/placeholder_movie.png' %}" alt="{{ s.movie.title }}">
-                {% endif %}
-              </a>
-            </div>
-            <div class="movie-detail">
-              <h5 class="movie-title">
-                <a href="{% url 'movies:movie_detail' s.movie.id %}">{{ s.movie.title }}</a>
-              </h5>
-              <p><strong>Thể loại:</strong> {{ s.movie.genre.genre_name }}</p>
-              <p><strong>Thời lượng:</strong> {{ s.movie.duration }} phút</p>
-              <p><strong>Giá vé:</strong> {{ s.movie.ticket_price|floatformat:0 }} VNĐ</p>
-              <p><strong>Vé đã bán:</strong> {{ s.movie.buy_count }}</p>
-              {% if s.movie.description %}
-              <p><strong>Mô tả:</strong> {{ s.movie.description|truncatewords:25 }}</p>
-              {% endif %}
-              <div class="showtimes">
-                <strong>Giờ chiếu:</strong>
-                {% for st in showtimes %}
-                  {% if st.movie.id == s.movie.id and st.show_time >= now %}
-                    <a href="{% url 'bookings:select_seats' st.id %}" class="btn-buy">
-                      {{ st.show_time|time:"H:i" }} - Mua vé
-                    </a>
+          {% with has_movies=True %}
+          <div class="movie-list movie-list-date" data-date="{{ date }}" {% if not forloop.first %}style="display:none"{% endif %}>
+            {% for s in showtimes %}
+            <div class="movie-block">
+              <div class="poster">
+                <a href="{% url 'movies:movie_detail' s.movie.id %}">
+                  {% if s.movie.poster %}
+                    <img src="{{ s.movie.poster }}" alt="{{ s.movie.title }}">
+                  {% else %}
+                    <img src="{% static 'images/placeholder_movie.png' %}" alt="{{ s.movie.title }}">
                   {% endif %}
-                {% endfor %}
+                </a>
+              </div>
+              <div class="movie-detail">
+                <h5 class="movie-title">
+                  <a href="{% url 'movies:movie_detail' s.movie.id %}">{{ s.movie.title }}</a>
+                </h5>
+                <p><strong>Thể loại:</strong> {{ s.movie.genre.genre_name }}</p>
+                <p><strong>Thời lượng:</strong> {{ s.movie.duration }} phút</p>
+                <p><strong>Giá vé:</strong> {{ s.movie.ticket_price|floatformat:0 }} VNĐ</p>
+                <p><strong>Vé đã bán:</strong> {{ s.movie.buy_count }}</p>
+                {% if s.movie.description %}
+                <p><strong>Mô tả:</strong> {{ s.movie.description|truncatewords:25 }}</p>
+                {% endif %}
+                <div class="showtimes">
+                  <strong>Giờ chiếu:</strong>
+                  {% for st in showtimes %}
+                    {% if st.movie.id == s.movie.id and st.show_time >= now %}
+                      <a href="{% url 'bookings:select_seats' st.id %}" class="btn-buy">
+                        {{ st.show_time|time:"H:i" }} - Mua vé
+                      </a>
+                    {% endif %}
+                  {% endfor %}
+                </div>
               </div>
             </div>
+            {% endfor %}
           </div>
-          {% endfor %}
-        </div>
+          {% endwith %}
         {% endif %}
       {% endfor %}
+
+      {% if not has_movies %}
+        <p class="no-movies">Không có phim nào đang chiếu, sẽ chiếu hoặc đã chiếu hết trong hôm nay.</p>
+      {% endif %}
+    {% endwith %}
+
 
     </div>
   </div>
