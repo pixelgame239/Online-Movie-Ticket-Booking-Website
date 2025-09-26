@@ -36,12 +36,14 @@
         </tr>
     </tbody>
 </table>
+{% if booking.customer.username != "guest" %}
 <p style="text-align: center; margin: 20px 0;">
     <a href="{{ my_tickets_url }}" 
        style="background-color: #007BFF; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">
        Xem chi tiết
     </a>
 </p>
+{% endif %}
 
 <p style="font-style: italic;">Nếu có gì sai sót, hoặc có ý kiến gì về đơn hàng này, vui lòng gọi đến hotline của Rạp hoặc gửi email qua <a href="mailto:20221580@eaut.edu.vn">20221580@eaut.edu.vn</a> (Lee An) để được hỗ trợ.</p>
 

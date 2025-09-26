@@ -97,14 +97,12 @@
 <div class="booking-header">BOOKING ONLINE</div>
 
 <div class="showtime-info">
-  Cinema {{ showtime.cinema.name }} | Số ghế: {{ seats.count }}/{{ seats.count }}<br>
-  {{ showtime.start_time|date:"d/m/Y H:i" }} - {{ showtime.end_time|date:"d/m/Y H:i" }}
+  Cinema {{ showtime.cinema.name }} | Số ghế: 42<br>
 </div>
 
 {% for message in messages %}
 <p>{{ message }}</p>
 {% endfor %}
-
 <form method="POST">
   {% csrf_token %}
   <div class="seat-map">
@@ -113,8 +111,8 @@
     <div class="seats">
       {% for seat in seat_numbers %}
         <label>
-          <input type="checkbox" name="seats" value="{{ seat }}" {% if seat in booked_seat_numbers %}disabled{% endif %} class="seat-checkbox">
-          <div class="seat {% if seat in booked_seat_numbers %}booked{% endif %}" data-seat-number="{{ seat }}">{{ seat }}</div>
+          <input type="checkbox" name="seats" value="{{ seat }}" {% if seat in booked_seat_numbers %}disabled{% elif seat|stringformat:"s" in prev_selected_seats %}checked{% endif %} class="seat-checkbox">
+          <div class="seat {% if seat in booked_seat_numbers %}booked{% elif seat|stringformat:"s" in prev_selected_seats %}temp{% endif %}" data-seat-number="{{ seat }}">{{ seat }}</div>
         </label>
       {% endfor %}
     </div>
@@ -130,15 +128,15 @@
     <h3>Thông tin khách hàng</h3>
     <div class="form-group">
       <label for="customer_name">Họ và tên</label>
-      <input type="text" id="customer_name" name="customer_name" required>
+      <input type="text" id="customer_name" name="customer_name" value="{{ customer_name }}" required>
     </div>
     <div class="form-group">
       <label for="customer_email">Email</label>
-      <input type="email" id="customer_email" name="customer_email" required>
+      <input type="email" id="customer_email" name="customer_email" value="{{ customer_email }}" required>
     </div>
     <div class="form-group">
       <label for="customer_phone">Số điện thoại</label>
-      <input type="tel" id="customer_phone" name="customer_phone" required pattern="[0-9]{10,11}">
+      <input type="tel" id="customer_phone" name="customer_phone" value="{{ customer_phone }}" required pattern="[0-9]{10,11}">
     </div>
   </div>
 
