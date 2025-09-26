@@ -213,3 +213,15 @@ def password_change(request):
     password_requirements = password_validators_help_texts()
 
     return render(request, 'password_change.html', {'form': form})
+
+def booking_view(request, showtime_id):
+    showtime = get_object_or_404(Showtime, id=showtime_id)
+
+    if request.method == "POST":
+        # 👉 After clicking "Xác nhận ghế", go to static success page
+        return redirect("booking_success")
+
+    return render(request, "booking.html", {"showtime": showtime})
+
+def booking_completed(request):
+    return render(request, "booking_completed.html")

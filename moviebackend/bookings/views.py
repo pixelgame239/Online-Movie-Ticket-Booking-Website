@@ -64,7 +64,7 @@ def payment(request, booking_id):
         messages.success(request, "Payment successful!")
         return redirect('bookings:booking_history')
 
-    return render(request, 'payment.html', {'booking': booking})
+    return render(request, 'booking_completed.html', {'booking': booking})
 
 
 
