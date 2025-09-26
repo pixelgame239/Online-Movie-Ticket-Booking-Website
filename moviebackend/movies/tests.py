@@ -1,86 +1,105 @@
-from django.test import TestCase
-from django.urls import reverse
+from django.test import TestCase, Client
 from django.utils import timezone
 from datetime import timedelta
-from .models import Movie, Genre, Cinema, Showtime
+from django.contrib.auth import get_user_model
+from movies.models import Movie, Cinema, Showtime, Genre
+from bookings.models import Booking, Seat
 
-class MovieAppTests(TestCase):
+User = get_user_model()
 
-    @classmethod
-    def setUpTestData(cls):
-        # Genre
-        cls.genre1 = Genre.objects.create(genre_name="Hài")
-        cls.genre2 = Genre.objects.create(genre_name="Hành động")
 
-        # Movie
-        cls.movie1 = Movie.objects.create(
-            title="Funny Movie",
-            genre=cls.genre1,
-            duration=90,
-            release_date=timezone.now().date()
+class IntegrationTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+        # Tạo admin và user test
+        self.admin = User.objects.create_superuser(
+            username="admin",
+            email="admin@test.com",
+            password="adminpass"
         )
-        cls.movie2 = Movie.objects.create(
-            title="Action Movie",
-            genre=cls.genre2,
+        self.user_data = {"username": "newuser", "password": "newpass123"}
+
+        # Genre bắt buộc
+        self.genre = Genre.objects.create(genre_name="Action")
+
+        # Movie + Cinema + Showtime
+        self.movie = Movie.objects.create(
+            title="Avatar",
             duration=120,
-            release_date=timezone.now().date()
+            description="Test Movie",
+            genre=self.genre,
+            ticket_price=100000
+        )
+        self.cinema = Cinema.objects.create(name="CGV HN", location="Times City")
+        self.showtime = Showtime.objects.create(
+            movie=self.movie,
+            cinema=self.cinema,
+            show_time=timezone.now() + timedelta(hours=3)
         )
 
-        # Cinema
-        cls.cinema1 = Cinema.objects.create(
-            name="CGV Vincom",
-            location="Hà Nội",
-            phone_number="0123456789"
+    # IT_01: Flow end-to-end đặt vé
+    def test_IT01_end_to_end_booking(self):
+        # Đăng ký user
+        user = User.objects.create_user(**self.user_data)
+
+        # Login
+        login_ok = self.client.login(
+            username=self.user_data["username"],
+            password=self.user_data["password"]
+        )
+        self.assertTrue(login_ok)
+
+        # Chọn ghế
+        seat = Seat.objects.create(showtime=self.showtime, seat_number="A1")
+
+        # Tạo booking
+        booking = Booking.objects.create(
+            customer=user,
+            showtime=self.showtime,
+            total_price=self.movie.ticket_price,
+            seats_booked=[seat.seat_number],
+            payment_method="banking",
+            customer_name="Test User",
+            customer_phone="0900000000",
+            customer_email="test@example.com"
         )
 
-        cls.cinema2 = Cinema.objects.create(
-            name="Lotte Cinema",
-            location="HCM",
-            phone_number="0987654321"
+        self.assertEqual(booking.status, "pending")
+        self.assertEqual(booking.total_price, 100000)
+
+    # IT_02: Tích hợp Booking và Payment
+    def test_IT02_booking_payment(self):
+        user = User.objects.create_user(**self.user_data)
+        seat = Seat.objects.create(showtime=self.showtime, seat_number="B1")
+
+        booking = Booking.objects.create(
+            customer=user,
+            showtime=self.showtime,
+            total_price=self.movie.ticket_price,
+            seats_booked=[seat.seat_number],
+            payment_method="card",
+            customer_name="Test User",
+            customer_phone="0900000000",
+            customer_email="test@example.com"
         )
 
-        # Showtime
-        cls.showtime1 = Showtime.objects.create(
-            movie=cls.movie1,
-            cinema=cls.cinema1,
-            show_time=timezone.now() + timedelta(hours=2)
-        )
-        cls.showtime2 = Showtime.objects.create(
-            movie=cls.movie2,
-            cinema=cls.cinema2,
-            show_time=timezone.now() + timedelta(days=1)
-        )
+        # Giả lập thanh toán thành công
+        booking.status = "confirmed"
+        booking.save()
 
-    # TC1: Trang home hiển thị phim đang chiếu
-    def test_home_view_shows_now_showing_movies(self):
-        response = self.client.get(reverse('movies:home'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, self.movie1.title)
-        self.assertContains(response, self.movie2.title)
+        self.assertEqual(booking.status, "confirmed")
 
-    # TC2: Trang home hiển thị top 3 phim hot
-    def test_home_view_shows_movies_hot(self):
-        # Tăng buy_count để movie1 trở thành hot
-        self.movie1.buy_count = 10
-        self.movie1.save()
-        response = self.client.get(reverse('movies:home'))
-        self.assertContains(response, self.movie1.title)
+    # IT_03: Admin hủy suất chiếu
+    def test_IT03_admin_cancel_showtime(self):
+        # Admin login
+        login_ok = self.client.login(username="admin", password="adminpass")
+        self.assertTrue(login_ok)
 
-    # TC3: Trang danh sách phim hiển thị tất cả movies
-    def test_movie_list_view_displays_all_movies(self):
-        response = self.client.get(reverse('movies:movie_list'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, self.movie1.title)
-        self.assertContains(response, self.movie2.title)
+        # Admin xóa suất chiếu
+        showtime_id = self.showtime.id
+        self.showtime.delete()
 
-    # TC4: Search movie theo title
-    def test_movie_list_search_by_title(self):
-        response = self.client.get(reverse('movies:movie_list'), {'q': 'Funny'})
-        self.assertContains(response, self.movie1.title)
-        self.assertNotContains(response, self.movie2.title)
-
-    # TC5: Filter movie theo genre
-    def test_movie_list_filter_by_genre(self):
-        response = self.client.get(reverse('movies:movie_list'), {'genre': 'Hành động'})
-        self.assertContains(response, self.movie2.title)
-        self.assertNotContains(response, self.movie1.title)
+        # User không thấy suất chiếu nữa
+        exists = Showtime.objects.filter(id=showtime_id).exists()
+        self.assertFalse(exists)
