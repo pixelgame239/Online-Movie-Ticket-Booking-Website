@@ -178,7 +178,7 @@ def profile_edit(request):
         if form.is_valid():
             user = form.save(commit=False)
             avatarFile = request.FILES.get('upload_avatar')
-            avatarBytes = avatarFile.read()
+            avatarBytes = avatarFile.read() if avatarFile else None
             if avatarFile:
                 ext = os.path.splitext(avatarFile.name)[1]
                 fileName = f"{request.user.username}{ext}"
