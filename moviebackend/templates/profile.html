@@ -8,6 +8,7 @@
   .profile-container {
     display: flex;
     max-width: 1200px;
+    width: auto;
     margin: 40px auto;
     gap: 40px;
     align-items: stretch;
@@ -109,7 +110,7 @@
     <a href="{% url 'users:profile' %}"><button class="active">THÔNG TIN CHUNG</button></a>
     <a href="{% url 'users:profile_edit' %}"><button>CHI TIẾT TÀI KHOẢN</button></a>
     <a href="{% url 'users:password_change' %}"><button >CÀI ĐẶT MẬT KHẨU</button></a>
-    <button>LỊCH SỬ GIAO DỊCH</button>
+    <a href="{% url 'bookings:my_tickets' %}" ><button>LỊCH SỬ GIAO DỊCH</button></a>
   </div>
 
   <!-- Main content -->

@@ -11,10 +11,6 @@ class MovieAdminForm(forms.ModelForm):
         required=False,
         help_text="Upload a poster image (stored in Supabase)"
     )
-    poster_url = forms.URLField(
-        required=False,
-        help_text="Or paste an existing poster URL"
-    )
 
     class Meta:
         model = Movie

@@ -1,7 +1,7 @@
 from django import forms
 from .models import Movie, Showtime, Cinema
 import os
-from .utils import upload_to_supabase  # tách function upload vào utils.py để gọn
+from utils.supabase import upload_to_supabase  # tách function upload vào utils.py để gọn
 
 
 class MovieForm(forms.ModelForm):
@@ -9,22 +9,15 @@ class MovieForm(forms.ModelForm):
         required=False, 
         help_text="Chọn file poster để upload"
     )
-    poster_url = forms.URLField(
-        required=False, 
-        help_text="Hoặc nhập URL poster trực tiếp",
-        widget=forms.URLInput(attrs={'class': 'form-control'})
-    )
-
     class Meta:
         model = Movie
-        fields = ['title', 'genre', 'duration', 'description', 'release_date', 'ticket_price', 'upload_poster', 'poster_url']
+        fields = ['title', 'genre', 'duration', 'description', 'release_date', 'ticket_price', 'upload_poster']
         labels = {
             'title': 'Tên phim',
             'genre': 'Thể loại',
             'duration': 'Thời lượng (phút)',
             'description': 'Mô tả',
             'upload_poster': 'Ảnh poster (upload)',
-            'poster_url': 'Ảnh poster (URL)',
             'release_date': 'Ngày khởi chiếu',
             'ticket_price': 'Giá vé',
         }
@@ -41,8 +34,7 @@ class MovieForm(forms.ModelForm):
         instance = super().save(commit=False)
 
         upload = self.cleaned_data.get("upload_poster")
-        url = self.cleaned_data.get("poster_url")
-
+        
         if upload:  # Nếu có upload file -> upload lên Supabase
             ext = os.path.splitext(upload.name)[1]
             fileName = f"{upload.name}{ext}"
