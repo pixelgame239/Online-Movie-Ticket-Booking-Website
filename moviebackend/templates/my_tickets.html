@@ -19,20 +19,20 @@
         <p><strong>Trạng thái:</strong> {{ booking.status }}</p>
 
         <h4>Danh sách ghế đã đặt: {{ booking.seats_booked|join:", " }}</h4>
+          {% if booking.status == 'pending' %}
+          <div style="display: flex; justify-content: end; gap: 15px;">
+            <form method="POST" action="{% url 'bookings:cancel_booking' %}" onsubmit="return confirmCancel();">
+                {% csrf_token %}
+                <input type="hidden" name="showtime_id" value="{{ booking.showtime.id }}">
+                <input type="hidden" name="booking_id" value="{{ booking.id }}">
+                <button type="submit" style="background-color: red; color: white; padding: 10px 15px; border: none; cursor: pointer;">Huỷ</button>
+            </form>
+            <form method="GET" action="{% url 'bookings:select_seats' booking.showtime.id %}">
+              <button type="submit" style="background-color: rgb(0, 81, 255); color: white; padding: 10px 15px; border: none; cursor: pointer;">Sửa</button>
+            </form>
+          </div>
+          {% endif %}
       </div>
-      {% if booking.status == 'pending' %}
-      <div>
-        <form method="POST" action="{% url 'bookings:cancel_booking' %}" onsubmit="return confirmCancel();">
-            {% csrf_token %}
-            <input type="hidden" name="showtime_id" value="{{ booking.showtime.id }}">
-            <input type="hidden" name="booking_id" value="{{ booking.id }}">
-            <button type="submit">Huỷ</button>
-        </form>
-        <form method="GET" action="{% url 'bookings:select_seats' booking.showtime.id %}">
-          <button type="submit">Sửa</button>
-        </form>
-      </div>
-      {% endif %}
       
     {% endfor %}
     <script>
