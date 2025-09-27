@@ -57,7 +57,7 @@ def select_seats(request, showtime_id):
         for seatBooked in selected_seats:
             Seat.objects.create(showtime=showtime, seat_number=seatBooked, is_booked=True)
 
-        return redirect('bookings:payment', booking_id=booking.id)
+        return redirect('bookings:booking_completed')
 
     return render(request, 'select_seats.html', {
         'showtime': showtime,
@@ -70,8 +70,8 @@ def select_seats(request, showtime_id):
     })
 
 
-def payment(request):
-    return render(request, 'payment.html')
+def booking_completed(request):
+    return render(request, 'booking_completed.html')
 
 @login_required
 def booking_history(request):
