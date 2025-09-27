@@ -12,7 +12,7 @@ class MovieBookingTests(unittest.TestCase):
         self.driver = webdriver.Edge()  # or webdriver.Edge() / Firefox()
         self.driver.maximize_window()
         self.driver.get("https://online-movie-ticket-booking-website-production.up.railway.app/")  # Change to your site address
-    """
+    
     def test_login_valid(self):
         driver = self.driver
         driver.find_element(By.LINK_TEXT, "Đăng nhập").click()
@@ -40,34 +40,49 @@ class MovieBookingTests(unittest.TestCase):
         search_box.send_keys(Keys.RETURN)
         time.sleep(2)
         self.assertIn("Avengers", driver.page_source)
-    """
+    
     def test_booking_seat(self):
         driver = self.driver
 
+        # Login first
         driver.find_element(By.LINK_TEXT, "Đăng nhập").click()
         driver.find_element(By.NAME, "username").send_keys("kientrung")
         driver.find_element(By.NAME, "password").send_keys("Kien8013")
         driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+        time.sleep(2)
 
+        # Go to booking
         driver.find_element(By.LINK_TEXT, "Mua vé").click()
         driver.find_element(By.LINK_TEXT, "Chọn ghế & Đặt vé").click()
-        # Find all available green seats
-        available_seats = driver.find_elements(By.CSS_SELECTOR, "input.seat-checkbox:not([disabled])")
+        time.sleep(4)
 
-        # Pick the first available seat
-        if available_seats:
-            available_seats[0].click()
-        else:
-            self.fail("No available seats to book")
-        
-        driver.find_element(By.NAME, "Email").send_keys("hiepkien2k4@gmail.com")
-        driver.find_element(By.NAME, "Số điện thoại").send_keys("1234567890")
-        driver.find_element(By.LINK_TEXT, "Xác nhận ghế").click()
+        seat_number = "42"
+        seat = driver.find_element(By.CSS_SELECTOR, f"div.seat[data-seat-number='{seat_number}']")
+        seat.click()
+        time.sleep(2)
+
+        # Confirm booking
+        driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
         time.sleep(2)
 
         # Verify booking success
         self.assertIn("Đặt vé thành công", driver.page_source)
 
+    def test_booking_history(self):
+        driver = self.driver
+
+        # Login first
+        driver.find_element(By.LINK_TEXT, "Đăng nhập").click()
+        driver.find_element(By.NAME, "username").send_keys("kientrung")
+        driver.find_element(By.NAME, "password").send_keys("Kien8013")
+        driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
+        time.sleep(2)
+
+        driver.find_element(By.LINK_TEXT, "Thành viên").click()
+
+        driver.find_element(By.LINK_TEXT, "LỊCH SỬ GIAO DỊCH").click()
+        time.sleep(2)
+        self.assertIn("Booking", driver.page_source)
 
 
     def tearDown(self):
