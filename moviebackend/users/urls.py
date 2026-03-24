@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import ping
 
 app_name = "users"
 
@@ -13,4 +14,5 @@ urlpatterns = [
     path('confirm-account/<uidb64>/<token>/', views.confirm_account, name='confirm_account'),
     path('password-change/', views.password_change, name='password_change'),
     path('reset/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),
+    path('ping/', ping),
 ]
