@@ -21,6 +21,9 @@ from django.contrib.auth.hashers import make_password
 from utils.supabase import upload_to_supabase
 import os
 
+def ping(request):
+    return HttpResponse("pong")
+    
 @login_required
 def home(request):
     movies_now_showing = Movie.objects.all().order_by('-release_date')[:6]
